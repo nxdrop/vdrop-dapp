@@ -9,9 +9,13 @@ import '@mdi/font/css/materialdesignicons.css'
 
 Vue.config.productionTip = false
 
-new Vue({
+const dapp = new Vue({
   router,
   store,
   vuetify,
   render: (h) => h(App),
 }).$mount('#app')
+
+if (process.env.NODE_ENV === 'development') {
+  global.$nxdrop = dapp
+}

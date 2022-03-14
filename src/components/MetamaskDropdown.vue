@@ -30,25 +30,25 @@
         </div>
 
         <div class="mm-btn-container metamask-bg">
-          <span class="text">MetaMask</span>
+          <span class="text">Metamask</span>
           <span>
-            <v-img :src="mmIcon" :alt="false"></v-img>
+            <v-img :src="mmIcon" alt="Metamask"></v-img>
           </span>
         </div>
-        <div class="mm-btn-container wallet-connbg">
+        <!-- <div class="mm-btn-container wallet-connbg">
           <span class="text">Wallet Connect</span>
           <span>
-            <v-img :src="walletIcon" :alt="false"></v-img>
+            <v-img :src="walletIcon" alt="wallet"></v-img>
           </span>
         </div>
 
         <div class="mm-btn-container coinbase-box">
           <span class="text">Coinbase</span>
           <span>
-            <v-img :src="coinbaseIcon" :alt="false"></v-img>
+            <v-img :src="coinbaseIcon" alt="coinbase"></v-img>
           </span>
-        </div>
-
+        </div> -->
+        <div class="meta-space"></div>
         <div class="mm-bottom-container">
           <div>
             <p>New to Ethereum?</p>
@@ -76,7 +76,7 @@ export default {
       coinbaseIcon,
       opened: false,
       metamaskBtnText: 'Connect Wallet',
-      mmHeadText: 'Connect your walle',
+      mmHeadText: 'Connect your wallet',
       mmTipText: ' By connecting your wallet, you agree to our Terms of Service and our Privacy Policy. ',
     }
   },
@@ -92,6 +92,10 @@ export default {
 .mm {
   &-menudrop {
     border-radius: 26px;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: stretch;
+    align-items: stretch;
   }
 
   &-modal {
@@ -117,9 +121,17 @@ export default {
   &-inner-wrap {
     flex: 1 1 100%;
     width: 100%;
-    height: 100%;
+    height: calc(100% - 40px);
     padding: 6px 20px;
-    padding-top: 32px;
+    // padding-top: 32px;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    align-items: stretch;
+
+    & > div.meta-space {
+      flex: 1 1 auto;
+    }
 
     & > div.mm-btn-container {
       width: 100%;

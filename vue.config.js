@@ -2,8 +2,10 @@
 const isProd = process.env.NODE_ENV === 'production'
 
 const { R, src } = require('./ci/paths')
+console.log('>>>>>>>>>>PUBLIC_PATH>>>>>>>>>', process.env.PUBLIC_PATH)
 
 module.exports = {
+  publicPath: process.env.PUBLIC_PATH || '',
   productionSourceMap: isProd,
   transpileDependencies: ['vuetify'],
   devServer: {

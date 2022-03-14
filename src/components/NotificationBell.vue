@@ -12,7 +12,7 @@
     absoluteorigin="center center"
     transition="scale-transition"
     nudge-bottom="20"
-    nudge-right="-280"
+    nudge-right="-240"
   >
     <template #activator="{ on, attrs }">
       <v-btn v-bind="attrs" plain :ripple="false" v-on="on">
@@ -21,16 +21,22 @@
         </v-badge>
       </v-btn>
     </template>
-    <v-card class="mx-auto" width="350">
-      <v-list class="my-6">
-        <v-list-item>
-          <v-list-item-title>HHHH</v-list-item-title>
-        </v-list-item>
-        <v-list-item>
-          <v-list-item-title>HHHH</v-list-item-title>
+    <v-sheet class="mx-2" width="260">
+      <div class="meta-inner-close">
+        <div class="meta-notifi-head">
+          <span class="text">最新通知</span>
+        </div>
+        <v-icon @click="closeWalletModal">mdi-close</v-icon>
+      </div>
+      <v-list class="meta-notifi-list" two-line>
+        <v-list-item v-for="(it, idx) in unreadMessages" :key="idx" dense>
+          <v-list-item-content>
+            <v-list-item-title>{{ it.title }}</v-list-item-title>
+            <v-list-item-subtitle>{{ it.message }}</v-list-item-subtitle>
+          </v-list-item-content>
         </v-list-item>
       </v-list>
-    </v-card>
+    </v-sheet>
   </v-menu>
 </template>
 
@@ -44,21 +50,57 @@ export default {
       opened: false,
       bellSize: 28,
       bellSvg,
-      unreadMessages: [{ message: 'hi' }],
+      unreadMessages: [
+        { message: 'hi, this is test notification', title: 'Test Nx Drop' },
+        { message: 'hi,Drop drop drop!', title: 'NFT drop 2022' },
+      ],
     }
   },
   computed: {
     unreadNum: () => (this.unreadMessages ? this.unreadMessages.length : 0),
   },
-  methods: {},
+  methods: {
+    closeWalletModal() {
+      this.opened = false
+    },
+  },
 }
 </script>
 <style lang="scss" scoped>
 .meta {
   &-belldrop {
-    border-radius: 26px;
+    border-radius: 16px;
     background: #fff;
+
+    & div.meta-inner-close {
+      width: 100%;
+      flex: 1 1 100%;
+      padding: 6px 0;
+      display: flex;
+      flex-flow: row nowrap;
+      justify-content: space-between;
+    }
+
+    & > div.meta-inner-wrap {
+      flex: 1 1 100%;
+      // padding: 6px 0px;
+    }
   }
+
+  &-notifi {
+    &-head {
+      span.text {
+        font-weight: 500;
+      }
+    }
+    &-list {
+      padding-top: 2px;
+      .v-list-item {
+        padding: 0px 0px;
+      }
+    }
+  }
+
   &-bell {
     &-container {
       padding: 0 12px;
