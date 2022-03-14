@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar :clipped-left="clipped" fixed app elevation="0" class="topbar" :height="height">
+  <v-app-bar :clipped-left="clipped" fixed app elevation="0" class="meta-topbar" :height="height">
     <v-container class="meta-headbar d-md-inline-flex align-md-center d-sm-flex">
       <MetaLogo />
       <MetaNavMenus />
@@ -30,4 +30,11 @@ export default {
   methods: {},
 }
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.meta-topbar {
+  &.theme--light.v-app-bar.v-toolbar.v-sheet {
+    background-color: transparent;
+    // border-bottom: 1px solid #ccc;
+  }
+}
+</style>
