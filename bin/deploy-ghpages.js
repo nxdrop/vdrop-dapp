@@ -76,13 +76,13 @@ function buildSelfProject() {
 
   commitHash = commitHash.replace(/\r|\r\n|\n/g, '')
 
-  PrintInfo('Commit Hash: ', commitHash)
-
   const buildRes = require('child_process')
     .execSync(`cd ${execEnvPath} && npm run build`, {
       encoding: 'utf-8',
     })
     .toString()
+
+  PrintInfo('Commit Hash: ', commitHash, buildRes)
 
   return commitHash
 }
@@ -118,7 +118,7 @@ function copyToTargetAndPush(targetPath, options = {}) {
   PrintInfo('Push>>>', targetPushLog)
 
   return ghPageName
-    ? `Publish Complete \nVisit this url : https://${ghPageName}\n`
+    ? `Publish Complete \nVisit this url : https://nxdrop.github.io/${ghPageName}\n`
     : 'Publish Complete \n You can login your github account to see result.'
 }
 

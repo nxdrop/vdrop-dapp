@@ -1,15 +1,16 @@
 import * as actions from './actions'
-import mutations from './mutations'
 import * as getters from './getters'
+import mutations from './mutations'
 
 export default {
   namespaced: true,
   state: {
-    hasMetamask: false,
+    chainId: 0x0,
+    currentWalletType: null,
+    selectedAddress: '',
   },
   mutations,
   getters: {
-    metamaskInjected: (state) => Boolean(state.hasMetamask),
     ...getters,
   },
   actions,

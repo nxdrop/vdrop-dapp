@@ -1,6 +1,6 @@
 <template>
   <v-menu
-    ref="metamaskDropdownBtn"
+    ref="accountDropdownBtn"
     v-model="opened"
     content-class="mm-menudrop"
     offset-y
@@ -16,47 +16,39 @@
     :eager="true"
   >
     <template #activator="{ on, attrs }">
-      <v-btn rounded :color="hasConnected ? '' : 'primary'" v-bind="attrs" x-large width="260" v-on="on">{{
-        metamaskBtnText
+      <v-btn rounded outlined text color="primary" v-bind="attrs" x-large width="260" v-on="on">{{
+        shortAddress
       }}</v-btn>
     </template>
-
     <v-sheet class="mm-modal" width="350" height="530" elevation="0">
       <div class="mm-inner-close">
+        <div class="title">MetaDrops</div>
+
         <v-icon large @click="closeWalletModal">mdi-close</v-icon>
       </div>
       <div class="mm-inner-wrap">
-        <div class="mm-modal-header">
-          <h3>{{ mmHeadText }}</h3>
-          <p>{{ mmTipText }}</p>
+        <div class="mm-modal-btns">
+          <div class="mm-menus-container metamask-bg" @click="getCredentailHandler">
+            <span class="text">获取参与资格</span>
+          </div>
+          <div class="mm-menus-container wallet-connbg" @click="createDropHandler">
+            <span class="text">我要发起空投</span>
+          </div>
+          <div class="mm-menus-container coinbase-box" @click="getCredentailHandler">
+            <span class="text">查看我获得的空投</span>
+          </div>
+          <div class="mm-menus-container coinbase-box" @click="getCredentailHandler">
+            <span class="text">查看我发起的空投</span>
+          </div>
         </div>
 
-        <div class="mm-btn-container metamask-bg" @click="clickMetamaskHandler">
-          <span class="text">{{ metamaskInjected ? '参与空投' : 'Download MetaMask' }}</span>
-          <span>
-            <v-img :src="mmIcon" alt="Metamask"></v-img>
-          </span>
-        </div>
-        <!-- <div class="mm-btn-container wallet-connbg">
-          <span class="text">Wallet Connect</span>
-          <span>
-            <v-img :src="walletIcon" alt="wallet"></v-img>
-          </span>
-        </div>
-
-        <div class="mm-btn-container coinbase-box">
-          <span class="text">Coinbase</span>
-          <span>
-            <v-img :src="coinbaseIcon" alt="coinbase"></v-img>
-          </span>
-        </div> -->
         <div class="meta-space"></div>
         <div class="mm-bottom-container">
           <div>
-            <p>New to Ethereum?</p>
+            <p>想要免费获取项目空投Token?</p>
           </div>
           <div>
-            <p>Learn more about wallets</p>
+            <p>需要在平台报名登记</p>
           </div>
         </div>
       </div>
@@ -66,59 +58,27 @@
 
 <script>
 import mmIcon from '@assets/icons/metamask.png'
-import walletIcon from '@assets/icons/wallet-conn.png'
-import coinbaseIcon from '@assets/icons/coinbase.png'
-
-import { mapGetters } from 'vuex'
-import { METAMASK_DOWNLOAD_URL } from '@lib/metamask/constants'
-
-import { connectMetamask } from '@lib/web3/metamask'
-const SIGNUP_ROUTES = ['/signup', '/signup/index']
-const DEF_CONNECT_TEXT = 'Connect Wallet'
+import { mapState, mapGetters } from 'vuex'
 export default {
-  name: 'MetamaskDropdown',
+  name: 'AccountDrop',
   components: {},
   data() {
     return {
       mmIcon,
-      walletIcon,
-      coinbaseIcon,
       opened: false,
-      metamaskBtnText: DEF_CONNECT_TEXT,
-      mmHeadText: 'Connect your wallet',
-      mmTipText: ' By connecting your wallet, you agree to our Terms of Service and our Privacy Policy. ',
     }
   },
   computed: {
-    ...mapGetters('web3', ['metamaskInjected', 'hasConnected']),
+    ...mapState('wal', ['selectedAddress']),
+    ...mapGetters('wal', ['shortAddress']),
   },
   methods: {
     closeWalletModal() {
       this.opened = false
     },
-    async clickMetamaskHandler() {
-      if (!this.metamaskInjected) {
-        window.open(METAMASK_DOWNLOAD_URL, 'MetaMask Download')
-        return
-      } else {
-        const vm = this
-        connectMetamask()
-          .then((resp) => {
-            console.log(resp)
-            // this.metamaskBtnText = resp.selectedAddress
-            if (SIGNUP_ROUTES.find((v) => v === vm.$route.path)) {
-              vm.$store.dispatch('wal/setWalletState', resp)
-              vm.opened = false
-            } else {
-              vm.$router.push(SIGNUP_ROUTES[0], () => {
-                vm.opened = false
-              })
-            }
-          })
-          .catch((e) => {
-            console.log(e)
-          })
-      }
+    getCredentailHandler() {},
+    createDropHandler() {
+      this.$router.push('/drop/nft')
     },
   },
 }
@@ -168,22 +128,36 @@ export default {
       flex: 1 1 auto;
     }
 
-    & > div.mm-btn-container {
+    & > div.mm-modal-btns {
+      flex: 1 1 auto;
+    }
+
+    div.mm-menus-container {
       width: 100%;
       height: 60px;
       border-radius: 12px;
       padding: 12px 24px;
       display: flex;
       flex-flow: row nowrap;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
       color: #fff;
       font-weight: 600;
       cursor: pointer;
 
+      span {
+        color: #fff;
+        font-weight: 600;
+        font-size: 18px;
+      }
+
       img {
         width: 40px;
         height: 40px;
+      }
+
+      &:first-child {
+        margin-top: 24px;
       }
 
       &:not(:last-child) {
@@ -205,15 +179,31 @@ export default {
       &.coinbase-box {
         border: 1px solid #eaeaea;
         color: #333;
+        span.text {
+          color: #333;
+          font-size: 16px;
+        }
       }
     }
   }
 
   &-inner-close {
+    width: 100%;
     float: right;
     z-index: 999;
     padding-top: 4px;
     padding-right: 4px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    & > div.title {
+      padding-left: 12px;
+      padding-top: 10px;
+      line-height: 24px;
+      font-weight: 600;
+    }
   }
 
   &-bottom-container {

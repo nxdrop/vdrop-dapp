@@ -4,7 +4,10 @@
       <MetaLogo />
       <MetaNavMenus />
       <v-spacer />
-      <MetamaskDropdown />
+
+      <MetamaskDropdown v-if="!selectedAddress" key="connectBtn" />
+      <AccountDropdown v-if="!!selectedAddress" key="accountBtn" />
+
       <NotificationBell />
     </v-container>
   </v-app-bar>
@@ -15,9 +18,12 @@ import MetaLogo from '@comp/MetaLogo.vue'
 import MetaNavMenus from '@/layouts/header/NavMenus.vue'
 import MetamaskDropdown from '@comp/MetamaskDropdown.vue'
 import NotificationBell from '@comp/NotificationBell.vue'
+import AccountDropdown from '@comp/AccountDropdown.vue'
+
+import { mapState, mapGetters } from 'vuex'
 export default {
   name: 'MetaHeadbar',
-  components: { MetaLogo, MetaNavMenus, MetamaskDropdown, NotificationBell },
+  components: { MetaLogo, MetaNavMenus, MetamaskDropdown, NotificationBell, AccountDropdown },
   data() {
     return {
       height: 135,
@@ -26,7 +32,10 @@ export default {
       fixed: false,
     }
   },
-  computed: {},
+  computed: {
+    ...mapState('wal', ['selectedAddress']),
+    ...mapGetters('web3', ['hasConnected']),
+  },
   methods: {},
 }
 </script>

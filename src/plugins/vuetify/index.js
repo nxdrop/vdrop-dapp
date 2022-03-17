@@ -1,9 +1,13 @@
 import Vue from 'vue'
-import Vuetify from 'vuetify/lib/framework'
+import 'material-design-icons-iconfont/dist/material-design-icons.css'
+import Vuetify from 'vuetify/lib'
 
 Vue.use(Vuetify)
 
 export default new Vuetify({
+  icons: {
+    iconfont: 'mdi', // 默认值 - 仅用于展示目的
+  },
   theme: {
     themes: {
       light: {

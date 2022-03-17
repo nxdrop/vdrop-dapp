@@ -11,19 +11,32 @@ const routes = [
     name: 'Home',
     component: HomePage,
   },
-  // {
-  //   path: '/signup',
-  //   name: 'signup',
-  //   redirect: { path: '/signup/player' },
-  //   component: () => import(/*webpackChunkName: "signup" */ '@pages/signup/player.vue'),
-  //   children: [
-  //     {
-  //       path: 'player',
-  //       name: 'signupAsPlayer',
-  //       component: () => import(/*webpackChunkName: "player" */ '@pages/signup/player.vue'),
-  //     },
-  //   ],
-  // },
+  {
+    path: '/signup',
+    name: 'signup',
+    redirect: { path: '/signup/index' },
+    component: () => import(/*webpackChunkName: "signup" */ '@pages/signup/index.vue'),
+    children: [
+      {
+        path: 'index',
+        name: 'signupIndex',
+        component: () => import(/*webpackChunkName: "player" */ '@pages/signup/index.vue'),
+      },
+    ],
+  },
+  {
+    path: '/drop',
+    name: 'drop',
+    redirect: { path: '/drop/nft' },
+    component: () => import(/*webpackChunkName: "signup" */ '@pages/drop/AddNFT.vue'),
+    children: [
+      {
+        path: 'nft',
+        name: 'addNFT',
+        component: () => import(/*webpackChunkName: "player" */ '@pages/drop/AddNFT.vue'),
+      },
+    ],
+  },
 ]
 
 const router = new VueRouter({
