@@ -12,6 +12,7 @@ const TARGET_PROJECT = '../nxdrop-ghpages'
 const TARGET_BRANCH_NAME = 'dev-demo'
 const TARGET_PROJECT_DOCS = 'docs'
 const TARGET_RELEASE_NAME = 'RELEASE.md'
+const BUILD_CDM = 'build:gh'
 
 const GIT_CMD = {
   getBranch: 'git rev-parse --abbrev-ref HEAD',
@@ -77,7 +78,7 @@ function buildSelfProject() {
   commitHash = commitHash.replace(/\r|\r\n|\n/g, '')
 
   const buildRes = require('child_process')
-    .execSync(`cd ${execEnvPath} && npm run build`, {
+    .execSync(`cd ${execEnvPath} && npm run ${BUILD_CDM}`, {
       encoding: 'utf-8',
     })
     .toString()

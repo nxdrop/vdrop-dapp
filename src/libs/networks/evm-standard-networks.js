@@ -1,5 +1,18 @@
+/*********************************************************************
+ * AircraftClass :: Victor Web3 Base lib
+ *		@description: Integration continue add networks
+ *		@description:
+ * WARNINGS:
+ *
+ * HISTORY:
+ *		@author: lanbery@gmail.com
+ *		@created:  2019-02-22
+ *		@comments:
+ **********************************************************************/
+export const ETHEREUM_MAINNET_CHAIN_ID = 0x1
+
 export const ETHEREUM_MAINNET_CHAIN = {
-  chainId: 0x1,
+  chainId: ETHEREUM_MAINNET_CHAIN_ID,
   chainName: 'Ethereum Mainnet',
   nativeCurrency: {
     name: 'ETH',
@@ -10,8 +23,9 @@ export const ETHEREUM_MAINNET_CHAIN = {
   blockExplorerUrls: ['https://etherscan.io'],
 }
 
+export const ETHEREUM_ROPSTEN_CHAIN_ID = 0x3
 export const ETHEREUM_ROPSTEN_CHAIN = {
-  chainId: 0x3,
+  chainId: ETHEREUM_ROPSTEN_CHAIN_ID,
   chainName: 'Ropsten Testnet',
   nativeCurrency: {
     name: 'ETH',
@@ -22,8 +36,9 @@ export const ETHEREUM_ROPSTEN_CHAIN = {
   blockExplorerUrls: ['https://ropsten.etherscan.io'],
 }
 
+export const ETHEREUM_RINKEBY_CHAIN_ID = 0x4
 export const ETHEREUM_RINKEBY_CHAIN = {
-  chainId: 0x4,
+  chainId: ETHEREUM_RINKEBY_CHAIN_ID,
   chainName: 'Rinkeby Testnet',
   nativeCurrency: {
     name: 'ETH',
@@ -34,8 +49,10 @@ export const ETHEREUM_RINKEBY_CHAIN = {
   blockExplorerUrls: ['https://rinkeby.etherscan.io'],
 }
 
+export const ETHEREUM_GOERLI_CHAIN_ID = 0x5
+
 export const ETHEREUM_GOERLI_CHAIN = {
-  chainId: 0x5,
+  chainId: ETHEREUM_GOERLI_CHAIN_ID,
   chainName: 'Goerli Testnet',
   nativeCurrency: {
     name: 'ETH',
@@ -46,8 +63,9 @@ export const ETHEREUM_GOERLI_CHAIN = {
   blockExplorerUrls: ['https://goerli.etherscan.io'],
 }
 
+export const ETHEREUM_KOVAN_CHAIN_ID = 0x2a
 export const ETHEREUM_KOVAN_CHAIN = {
-  chainId: 0x2a,
+  chainId: ETHEREUM_KOVAN_CHAIN_ID,
   chainName: 'Kovan Testnet',
   nativeCurrency: {
     name: 'ETH',
@@ -58,8 +76,9 @@ export const ETHEREUM_KOVAN_CHAIN = {
   blockExplorerUrls: ['https://kovan.etherscan.io'],
 }
 
+export const BSC_MAINNET_CHAIN_ID = 0x38
 export const BSC_MAINNET_CHAIN = {
-  chainId: 0x38,
+  chainId: BSC_MAINNET_CHAIN_ID,
   chainName: 'BSC Mainnet',
   nativeCurrency: {
     name: 'BNB',
@@ -70,8 +89,9 @@ export const BSC_MAINNET_CHAIN = {
   blockExplorerUrls: ['https://bscscan.com'],
 }
 
+export const BSC_TESTNET_CHAIN_ID = 0x61
 export const BSC_TESTNET_CHAIN = {
-  chainId: 0x61,
+  chainId: BSC_TESTNET_CHAIN_ID,
   chainName: 'BSC Testnet',
   nativeCurrency: {
     name: 'BNB',
@@ -82,8 +102,12 @@ export const BSC_TESTNET_CHAIN = {
   blockExplorerUrls: ['https://testnet.bscscan.com'],
 }
 
+/**
+ * Matic
+ */
+export const POLYGON_MAINNET_ID = 0x89
 export const POLYGON_MAINNET = {
-  chainId: 0x89,
+  chainId: POLYGON_MAINNET_ID,
   chainName: 'Matic Network',
   nativeCurrency: {
     name: 'MATIC',
@@ -94,8 +118,9 @@ export const POLYGON_MAINNET = {
   blockExplorerUrls: ['https://polygonscan.com/'],
 }
 
+export const POLYGON_MUMBAI_ID = 0x13881
 export const POLYGON_MUMBAI = {
-  chainId: 0x13881,
+  chainId: POLYGON_MUMBAI_ID,
   chainName: 'Mumbai Testnet',
   nativeCurrency: {
     name: 'MATIC',

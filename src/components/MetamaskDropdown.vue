@@ -2,6 +2,7 @@
   <v-menu
     ref="metamaskDropdownBtn"
     v-model="opened"
+    class="d-none d-md-flex"
     content-class="mm-menudrop"
     offset-y
     width="260"
@@ -91,6 +92,7 @@ export default {
   },
   computed: {
     ...mapGetters('web3', ['metamaskInjected', 'hasConnected']),
+    ...mapGetters(['getVxsCls']),
   },
   methods: {
     closeWalletModal() {

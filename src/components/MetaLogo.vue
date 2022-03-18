@@ -1,9 +1,9 @@
 <template>
-  <div class="meta-logo-container">
+  <div class="meta-logo-container py-0">
     <v-app-bar-nav-icon>
       <img :src="LogoImg" class="meta-logo" @click="homeHandle" />
     </v-app-bar-nav-icon>
-    <span class="meta-logo-title">{{ metaTitle }}</span>
+    <span class="meta-logo-title d-none d-md-flex">{{ metaTitle }}</span>
   </div>
 </template>
 
@@ -17,7 +17,7 @@ export default {
     return { LogoImg }
   },
   computed: {
-    ...mapGetters(['metaTitle']),
+    ...mapGetters(['metaTitle', 'getVxsCls']),
   },
   methods: {
     homeHandle() {},
@@ -33,6 +33,7 @@ export default {
       padding: 0;
       padding-right: 1em;
       align-items: center;
+      align-self: end;
     }
 
     &-title {

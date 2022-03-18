@@ -1,10 +1,14 @@
 import Vue from 'vue'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
-import Vuetify from 'vuetify/lib'
+import Vuetify, { VLayout } from 'vuetify/lib'
+// import preset from './preset'
 
-Vue.use(Vuetify)
+Vue.use(Vuetify, {
+  components: { VLayout },
+})
 
-export default new Vuetify({
+const vuetifyInst = new Vuetify({
+  // preset,
   icons: {
     iconfont: 'mdi', // 默认值 - 仅用于展示目的
   },
@@ -22,3 +26,6 @@ export default new Vuetify({
     },
   },
 })
+
+vuetifyInst.cls = 'd-none d-md-flex d-lg-none'
+export default vuetifyInst

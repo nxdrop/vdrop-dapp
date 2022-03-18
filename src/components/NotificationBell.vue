@@ -41,6 +41,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import bellSvg from '@assets/bell.svg'
 export default {
   name: 'NotificationBell',
@@ -57,6 +58,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['getVxsCls']),
     unreadNum: () => (this.unreadMessages ? this.unreadMessages.length : 0),
   },
   methods: {

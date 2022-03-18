@@ -4,79 +4,31 @@
       <h3>创建我的 NFT 空投项目</h3>
     </v-row>
     <v-row class="justify-center py-4">
-      <v-col md="10" sm="12">
+      <v-col md="11" sm="12">
         <v-card class="px-4 py-4">
           <v-card-title class="meta-drop-card-title">
             <div class="meta-toggle-wrap">
               <v-btn-toggle :value="filterType" mandatory>
-                <v-btn @click="setDropFilterTypeHandler(1)">白名单空投</v-btn>
-                <v-btn @click="setDropFilterTypeHandler(2)">自定义筛选条件</v-btn>
+                <v-btn>白名单空投</v-btn>
+                <!-- <v-btn @click="setDropFilterTypeHandler(2)">自定义筛选条件</v-btn> -->
               </v-btn-toggle>
             </div>
-
-            <div class="meta-step-wrap">
-              <v-stepper
-                v-if="filterType === 1"
-                key="whiteListType"
-                :value="whiteStepVal"
-                alt-labels
-                :outlined="false"
-                elevation="0"
-              >
-                <v-stepper-header>
-                  <v-stepper-step step="1" :complete="whiteStepVal > 1"> Enter Project Infomation </v-stepper-step>
-
-                  <v-divider></v-divider>
-
-                  <v-stepper-step step="2" :complete="whiteStepVal > 2"> Upload Address List </v-stepper-step>
-
-                  <v-divider></v-divider>
-                  <v-stepper-step step="3" :complete="whiteStepVal > 3"> Approve Drop Proxy </v-stepper-step>
-
-                  <v-divider></v-divider>
-
-                  <v-stepper-step step="4" editable> Submit </v-stepper-step>
-                </v-stepper-header>
-              </v-stepper>
-
-              <v-stepper
-                v-if="filterType !== 1"
-                key="customFilterStep"
-                v-model="customStepVal"
-                alt-labels
-                :outlined="false"
-                elevation="0"
-              >
-                <v-stepper-header>
-                  <v-stepper-step step="1" :complete="customStepVal > 1"> Enter Project Infomation </v-stepper-step>
-
-                  <v-divider></v-divider>
-
-                  <v-stepper-step step="2" :complete="customStepVal > 2"> Select Filter Rule </v-stepper-step>
-
-                  <v-divider></v-divider>
-                  <v-stepper-step step="3" :complete="customStepVal > 3"> Approve Drop Proxy </v-stepper-step>
-
-                  <v-divider></v-divider>
-
-                  <v-stepper-step step="3" editable> Submit </v-stepper-step>
-                </v-stepper-header>
-              </v-stepper>
-            </div>
+            <WhiteListSteper ref="whiteListStepComp" />
+            <div class="meta-step-wrap"></div>
           </v-card-title>
 
           <v-form ref="form" class="px-2" name="nftForm">
-            <v-col cols="8" md="8">
+            <v-col cols="12" md="8" sm="12">
               <v-text-field
                 name="name"
-                :value="name"
+                :value="projName"
                 :rules="rules.nameRules"
                 label="Project Name"
                 required
                 outlined
               ></v-text-field>
             </v-col>
-            <v-col cols="8" md="8">
+            <v-col cols="12" md="8" sm="12">
               <v-text-field
                 name="projUrl"
                 :value="projUrl"
@@ -85,25 +37,48 @@
                 outlined
               ></v-text-field>
             </v-col>
-            <v-col cols="8" md="8">
+            <v-col cols="12" md="8" sm="12">
               <v-text-field name="projLogo" :value="projUrl" label="Project Logo Url" required outlined></v-text-field>
             </v-col>
-            <v-col cols="8" md="8">
-              <v-textarea solo name="input-7-4" label="Project Intro" outlined></v-textarea>
+            <v-col cols="12" md="8" sm="12">
+              <v-textarea :value="projIntro" solo name="input-7-4" label="Project Intro" outlined></v-textarea>
             </v-col>
 
-            <v-col v-if="filterType === 1" key="uploadAddressInputCol" cols="8" md="8">
-              <v-file-input
-                accept="image/*"
-                label="Upload your addresses white list"
-                name="addressesFile"
-                :value="addressesFile"
-                outlined
-              >
-              </v-file-input>
-            </v-col>
+            <v-divider></v-divider>
+            <!-- Swtich NFT Contract -->
 
-            <v-col v-if="filterType !== 1" key="useMetaRuleCol" class="meta-rule-wrap" cols="8" md="8" sm="8">
+            <v-row v-if="filterType === 1" key="uploadAddressInputRow" align="center" class="d-flex mt-2">
+              <v-col cols="12" md="10" sm="12">
+                <v-file-input
+                  ref="whitelistFileInput"
+                  dense
+                  accept="text/plain"
+                  label="Upload address whitelist file"
+                  name="whitelistFile"
+                  :value="whitelistFile"
+                  outlined
+                  @change="whiteFileChangeHandler"
+                >
+                  <template #append-outer>
+                    <div class="meta-file-appender">
+                      <v-btn text plain outlined small class="me-2" @click="uploadFileHandler">Upload</v-btn>
+                      <v-btn
+                        tag="a"
+                        text
+                        plain
+                        color="primary"
+                        class="ms-2"
+                        href="/whitelist_template.txt"
+                        download
+                        small
+                        >Template download</v-btn
+                      >
+                    </div>
+                  </template>
+                </v-file-input>
+              </v-col>
+            </v-row>
+            <v-col v-if="filterType !== 1" key="useMetaRuleCol" class="meta-rule-wrap" cols="12" md="8" sm="12">
               <v-select
                 :value="select"
                 :items="filterRules"
@@ -116,35 +91,38 @@
                 <v-btn text color="orange">add custom rule</v-btn>
               </div>
             </v-col>
-            <v-divider></v-divider>
-            <v-col cols="12" md="8">
-              <v-radio-group mandatory row>
-                <v-radio label="Use MetaDrop NFT Contract Mint" value="1" @click="() => (useMetaSc = 1)"></v-radio>
-                <v-radio label="Use my NFT Contract Mint" value="2" @click="() => (useMetaSc = 2)"></v-radio>
+
+            <v-col cols="12" md="12">
+              <v-radio-group mandatory row disabled hint="Swtich NFT Contract">
+                <v-radio label="Use metadrop NFT contract mint" value="1" @click="() => (useMetaSc = 1)"></v-radio>
+                <v-radio label="Use my NFT contract mint" value="2" @click="() => (useMetaSc = 2)"></v-radio>
               </v-radio-group>
-              {{ useMetaSc }}
             </v-col>
-            <v-col cols="8" md="8">
+
+            <v-col cols="12" md="8" sm="12">
               <v-text-field
-                name="tokenAmount"
-                :value="tokenAmount"
-                hint="Entry will drop NFT amount"
+                name="dropAmount"
+                :value="dropAmount"
+                hint="Entry an number of drop amount"
                 label="Drop amount"
+                type="number"
                 required
                 outlined
+                readonly
               ></v-text-field>
             </v-col>
-            <v-col v-if="showUseMetaSc" key="useMetaBaseUrl" cols="8" md="8">
+            <v-col v-if="showUseMetaSc" key="useMetaBaseUrl" cols="12" md="8" sm="12">
               <v-text-field
                 name="nftBaseUrl"
                 :value="nftBaseUrl"
-                hint="nftBaseUrl"
-                label="Your NFT Contract address"
+                hint=""
+                label="NFT baseURI"
                 required
                 outlined
+                readonly
               ></v-text-field>
             </v-col>
-            <v-col v-if="!showUseMetaSc" key="useCustNFTSCAddress" cols="8" md="8">
+            <v-col v-if="!showUseMetaSc" key="useCustNFTSCAddress" cols="8" md="8" sm="12">
               <v-text-field
                 name="custNFTAddress"
                 :value="nftScAddress"
@@ -167,13 +145,16 @@
             </v-col>
 
             <v-col cols="12" md="4">
-              <v-switch
-                :value="opensea"
-                label="Add opeasea traits protocol"
-                :true-value="true"
-                :false-value="false"
-                @change="onOpenseaChangeHandler"
-              ></v-switch>
+              <v-sheet>
+                <v-switch
+                  :value="opensea"
+                  :label="`Add opeasea traits protocol [${opensea ? 'Y' : 'N'}] `"
+                  :true-value="true"
+                  :input-value="true"
+                  :false-value="false"
+                  @change="onOpenseaChangeHandler"
+                ></v-switch>
+              </v-sheet>
             </v-col>
           </v-form>
           <v-form ref="TraitsForm">
@@ -230,24 +211,9 @@
 
           <!-- Btn -->
           <v-card-actions class="meta-actions-wrap">
-            <v-row v-if="filterType === 1" key="whitleBtns" class="justiy-center">
-              <v-col cols="6" class="px-2"
-                ><v-btn color="orange" block text :disabled="whiteStepVal <= 1" @click="prevStepHandler(1)"
-                  >Apporve</v-btn
-                ></v-col
-              >
-              <v-col cols="6" class="px-2"
-                ><v-btn color="orange" block text :disabled="whiteStepVal !== 4">Submit</v-btn></v-col
-              >
-            </v-row>
-            <v-row v-if="filterType !== 1" key="custBtns" class="justiy-center">
-              <v-col cols="6" class="px-2"
-                ><v-btn color="orange" block text :disabled="customStepVal <= 1" @click="prevStepHandler(1)"
-                  >Apporve</v-btn
-                ></v-col
-              >
-              <v-col cols="6" class="px-2"
-                ><v-btn color="orange" block text :disabled="customStepVal !== 4">Submit</v-btn></v-col
+            <v-row key="whitleBtns" class="justiy-center">
+              <v-col cols="12" class="px-2"
+                ><v-btn color="orange" block text @click="submitDropHandler">Submit</v-btn></v-col
               >
             </v-row>
           </v-card-actions>
@@ -258,23 +224,29 @@
 </template>
 
 <script>
+import WhiteListSteper from './WhiteListSteper.vue'
+import { getMetaDropNftBaseUri } from '@lib/env/safe-env.js'
 export default {
   name: 'AddNFTDrop',
-  components: {},
+  components: { WhiteListSteper },
   data() {
     return {
+      ts: '',
+      merkleRoot: '',
       filterType: 1,
-      name: '',
+      projName: '',
       projUrl: '',
+      projIntro: '',
       whiteStepVal: 1,
       customStepVal: 2,
-      addressesFile: null,
-      tokenAmount: 100,
+      whitelistFile: null,
+      dropAmount: 0,
       opensea: true,
       useMetaSc: 1,
       nftScAddress: '',
       rules: {
         nameRules: [(v) => !!v || 'Name is required'],
+        addrFileRules: [],
       },
       select: null,
       nftBaseUrl: '',
@@ -303,6 +275,17 @@ export default {
       return this.useMetaSc === 1
     },
   },
+  watch: {
+    tsListener(n, old) {
+      if (n !== old) {
+      }
+    },
+    merkleRoot(newRoot, oldRoot) {},
+  },
+  mounted() {
+    const baseUri = getMetaDropNftBaseUri()
+    this.nftBaseUrl = baseUri
+  },
   methods: {
     getCircleColor(v) {
       if (!v) return ''
@@ -311,8 +294,36 @@ export default {
       if (v >= 50 && v < 80) return 'deep-orange lighten-2'
       if (v >= 80) return 'red accent-2'
     },
+    calcWhiteStep() {
+      if (!this.merkleRoot && this.dropAmount > 0) {
+        return 3
+      }
+      if (this.projName) {
+        return 2
+      }
+      return 1
+    },
     setDropFilterTypeHandler(typ) {
       this.filterType = typ
+    },
+    whiteFileChangeHandler(file) {
+      console.log('>>>>>>>>>file>>>>>>', file)
+      if (!this.whitelistFile) {
+        this.merkleRoot = ''
+        this.dropAmount = 0
+      }
+    },
+    // click handler
+    uploadFileHandler() {
+      this.merkleRoot === 'a'
+      this.dropAmount = 10
+    },
+    // get
+    submitDropHandler() {
+      const metaSteper = this.$refs.whiteListStepComp
+      if (typeof metaSteper.setStepValue === 'function') {
+        metaSteper.setStepValue(2)
+      }
     },
     nextStepHandler(typ) {
       if (typ === 1) {
@@ -330,6 +341,7 @@ export default {
       }
       console.log('>>>>>>>>>>>>>>>>>>>', this.whiteStepVal, this.customStepVal)
     },
+
     prevStepHandler(typ) {
       if (typ === 1) {
         if (this.whiteStepVal > 1) {
@@ -408,6 +420,16 @@ export default {
       flex-flow: row nowrap;
       justify-content: space-around;
       align-items: center;
+    }
+  }
+
+  &-file {
+    &-appender {
+      display: flex;
+      flex: 1 1 auto;
+      flex-flow: row;
+      justify-content: flex-start;
+      align-items: flex-start;
     }
   }
 
