@@ -277,8 +277,8 @@ export default {
   },
   watch: {
     tsListener(n, old) {
-      if (n !== old) {
-      }
+      // if (n !== old) {
+      // }
     },
     merkleRoot(newRoot, oldRoot) {},
   },
