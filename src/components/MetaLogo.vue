@@ -1,6 +1,6 @@
 <template>
   <div class="meta-logo-container py-0">
-    <v-app-bar-nav-icon>
+    <v-app-bar-nav-icon @click="homeHandle">
       <img :src="LogoImg" class="meta-logo" @click="homeHandle" />
     </v-app-bar-nav-icon>
     <span class="meta-logo-title d-none d-md-flex">{{ metaTitle }}</span>
@@ -20,7 +20,9 @@ export default {
     ...mapGetters(['metaTitle', 'getVxsCls']),
   },
   methods: {
-    homeHandle() {},
+    homeHandle() {
+      this.$router.push('/')
+    },
   },
 }
 </script>
