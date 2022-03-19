@@ -7,6 +7,7 @@ import ui from './modules/ui'
 import web3 from './modules/web3'
 import wallet from './modules/wallet'
 
+import * as rootGetters from './root-getters.js'
 const UPD_HEAD_SCROLL_OVER = 'theme@srcoll/toggle_theme'
 
 export default new Vuex.Store({
@@ -15,6 +16,7 @@ export default new Vuex.Store({
     overHeadTheme: '',
   },
   getters: {
+    ...rootGetters,
     metaTitle: (state) => state.metaTitle,
     metaHeadOver: (state) => state.overHeadTheme || '',
   },
