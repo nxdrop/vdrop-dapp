@@ -92,7 +92,6 @@ export default {
   },
   computed: {
     ...mapGetters('web3', ['metamaskInjected', 'hasConnected']),
-    ...mapGetters(['getVxsCls']),
   },
   methods: {
     closeWalletModal() {

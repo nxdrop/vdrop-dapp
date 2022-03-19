@@ -4,10 +4,25 @@
       <MetaLogo />
       <MetaNavMenus />
       <v-spacer class="d-none d-md-flex" />
-
-      <MetamaskDropdown v-if="!selectedAddress" key="connectBtn" />
-      <AccountDropdown v-if="!!selectedAddress" key="accountBtn" />
-      <NotificationBell />
+      <!-- <MetaTopMenu /> -->
+      <!-- <MetamaskDropdown v-if="!selectedAddress" key="connectBtn" />
+      <AccountDropdown v-if="!!selectedAddress" key="accountBtn" /> -->
+      <!-- -->
+      <nav class="meta-mainnav">
+        <ul>
+          <li class="mainnav__wallet">
+            <MetaTopMenu class-name="d-none d-sm-flex" />
+          </li>
+          <li class="mainnav__bell">
+            <NotificationBell class-name="d-none d-sm-flex" />
+          </li>
+          <li class="mainnav__menu">
+            <v-btn icon class="d-flex d-sm-none">
+              <v-icon>mdi-menu</v-icon>
+            </v-btn>
+          </li>
+        </ul>
+      </nav>
     </v-container>
   </v-app-bar>
 </template>
@@ -18,11 +33,12 @@ import MetaNavMenus from '@/layouts/header/NavMenus.vue'
 import MetamaskDropdown from '@comp/MetamaskDropdown.vue'
 import NotificationBell from '@comp/NotificationBell.vue'
 import AccountDropdown from '@comp/AccountDropdown.vue'
+import MetaTopMenu from '@/meta-ui/wallet/MetaUserMenu.vue'
 
 import { mapState, mapGetters } from 'vuex'
 export default {
   name: 'MetaHeadbar',
-  components: { MetaLogo, MetaNavMenus, MetamaskDropdown, NotificationBell, AccountDropdown },
+  components: { MetaLogo, MetaNavMenus, MetaTopMenu, NotificationBell },
   data() {
     return {
       height: 135,
@@ -34,7 +50,7 @@ export default {
   computed: {
     ...mapState('wal', ['selectedAddress']),
     ...mapGetters('web3', ['hasConnected']),
-    ...mapGetters(['metaHeadOver', 'getVxsCls']),
+    ...mapGetters(['metaHeadOver']),
   },
   mounted() {
     window.addEventListener('scroll', this.handleScroller)
@@ -57,6 +73,37 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+nav.meta {
+  &-mainnav {
+    right: 0.5em;
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+
+    ul {
+      display: block;
+      list-style-type: disc;
+      margin-block-start: 1em;
+      margin-block-end: 1em;
+      margin-inline-start: 0px;
+      margin-inline-end: 0px;
+      padding-inline-start: 40px;
+
+      & > li {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: inline-block;
+        vertical-align: middle;
+
+        &:not(:first-child) {
+          padding-left: 0.45em;
+        }
+      }
+    }
+  }
+}
+
 .meta-topbar {
   &.theme--light.v-app-bar.v-toolbar.v-sheet {
     background-color: transparent;

@@ -17,7 +17,7 @@ export default {
     return { LogoImg }
   },
   computed: {
-    ...mapGetters(['metaTitle', 'getVxsCls']),
+    ...mapGetters(['metaTitle']),
   },
   methods: {
     homeHandle() {

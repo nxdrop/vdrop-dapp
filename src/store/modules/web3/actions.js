@@ -9,13 +9,16 @@ import * as types from './mutation-types'
  */
 export const checkMetaMask = async ({ commit }) => {
   try {
+    commit(types.SET_CHECKING_STATE, false)
     const provider = await detectEthereumProvider()
 
     if (provider && provider.isMetaMask) {
       // commit(types.SET_ETHEREUM_PROVIDER, provider)
       commit(types.SET_METAMASK_INJECTED, true)
+      commit(types.SET_CHECKING_STATE, true)
     }
   } catch (ex) {
+    commit(types.SET_CHECKING_STATE, true)
     console.log('>>>>>>>>>>>checkMetaMask>>>>>>>>>>>>', ex)
   }
 }

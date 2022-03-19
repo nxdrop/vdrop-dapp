@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
+import ui from './modules/ui'
 import web3 from './modules/web3'
 import wallet from './modules/wallet'
 
@@ -10,12 +11,10 @@ const UPD_HEAD_SCROLL_OVER = 'theme@srcoll/toggle_theme'
 
 export default new Vuex.Store({
   state: {
-    vxsCls: 'd-none d-md-flex d-lg-none',
     metaTitle: 'MetaDrops',
     overHeadTheme: '',
   },
   getters: {
-    getVxsCls: (state) => state.vxsCls,
     metaTitle: (state) => state.metaTitle,
     metaHeadOver: (state) => state.overHeadTheme || '',
   },
@@ -30,6 +29,7 @@ export default new Vuex.Store({
     },
   },
   modules: {
+    ui,
     web3,
     wal: wallet,
   },

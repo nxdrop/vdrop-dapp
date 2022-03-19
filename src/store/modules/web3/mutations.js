@@ -7,4 +7,7 @@ export default {
   [types.SET_ETHEREUM_PROVIDER](state, provider) {
     state.provider = provider || null
   },
+  [types.SET_CHECKING_STATE](state, checked) {
+    state.checked = Boolean(checked)
+  },
 }

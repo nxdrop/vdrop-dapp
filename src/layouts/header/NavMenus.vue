@@ -1,5 +1,5 @@
 <template>
-  <div class="meta-navmenus" :class="vxsCls">
+  <div class="meta-navmenus">
     <v-btn plain>Home</v-btn>
   </div>
 </template>
@@ -12,9 +12,7 @@ export default {
   data() {
     return {}
   },
-  computed: {
-    ...mapState(['vxsCls']),
-  },
+  computed: {},
   methods: {},
 }
 </script>

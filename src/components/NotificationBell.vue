@@ -15,7 +15,7 @@
     nudge-right="-240"
   >
     <template #activator="{ on, attrs }">
-      <v-btn v-bind="attrs" plain :ripple="false" v-on="on">
+      <v-btn v-bind="attrs" plain :ripple="false" :class="className" v-on="on">
         <v-badge color="green" overlap dot>
           <v-img :src="bellSvg" :width="bellSize" :height="bellSize"></v-img>
         </v-badge>
@@ -46,6 +46,12 @@ import bellSvg from '@assets/bell.svg'
 export default {
   name: 'NotificationBell',
   components: {},
+  props: {
+    className: {
+      type: String,
+      default: '',
+    },
+  },
   data() {
     return {
       opened: false,
@@ -58,7 +64,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getVxsCls']),
     unreadNum: () => (this.unreadMessages ? this.unreadMessages.length : 0),
   },
   methods: {

@@ -18,5 +18,5 @@ const dapp = new Vue({
 }).$mount('#app')
 
 if (process.env.NODE_ENV === 'development') {
-  global.$nxdrop = dapp
+  global.nxdrop = dapp
 }
