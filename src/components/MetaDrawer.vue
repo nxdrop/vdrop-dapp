@@ -1,14 +1,19 @@
 <template>
   <v-navigation-drawer
-    v-model="rightDrawer"
+    :value="rightDrawer"
     app
     right="right"
     clipped
     fixed
     disable-resize-watcher
     disable-route-watcher
+    hide-overlay
+    @input="drawerInputChanged"
   >
     <v-container>
+      <v-list-item key="metaMobileHead">
+        {{ selectedAdddress || 'Open DApp in MetaMask' }}
+      </v-list-item>
       <v-list>
         <v-list-item>hhhh</v-list-item>
       </v-list>
@@ -25,10 +30,15 @@ export default {
     right: true,
   }),
   computed: {
-    ...mapState(['ui']),
+    ...mapState('wal', ['selectedAdddress']),
+    ...mapState('ui', ['drawer']),
     ...mapGetters('ui', ['rightDrawer']),
   },
-  methods: {},
+  methods: {
+    drawerInputChanged(v) {
+      this.$store.dispatch('ui/toggleDrawer', v)
+    },
+  },
 }
 </script>
 <style lang="scss" scoped></style>

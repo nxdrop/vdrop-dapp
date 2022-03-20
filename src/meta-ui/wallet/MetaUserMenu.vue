@@ -6,10 +6,10 @@
       :loading="envChecking"
       color="primary"
       rounded
-      width="180"
+      width="220"
       :class="className"
       @click="unConnectHandler"
-      >{{ metamaskInjected ? 'Connect Wallet' : 'Download MetaMask' }}</v-btn
+      >{{ metamaskInjected ? 'Connect Wallet' : 'MetaMask Unfound' }}</v-btn
     >
     <v-menu
       v-if="walletConnected"
@@ -92,6 +92,7 @@ import dropSvg from '@assets/drop.svg'
 
 import { getWeb3js } from '@lib/web3'
 import { signByPersonal } from '@lib/web3/sign-util'
+import { METAMASK_DOWNLOAD_URL } from '@lib/metamask/constants'
 
 const DEF_CONNECT_BTN_TEXT = 'Connect Wallet'
 export default {
@@ -128,6 +129,7 @@ export default {
     async unConnectHandler() {
       if (!this.metamaskInjected) {
         //TODO
+        window.open(METAMASK_DOWNLOAD_URL, 'MetaMask')
         return
       } else {
         const vm = this
