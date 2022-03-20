@@ -12,12 +12,20 @@ module.exports = {
     port: process.env.PORT || 37211,
     disableHostCheck: false,
     proxy: {
+      // '/meta': {
+      //   changeOrigin: true,
+      //   ws: true,
+      //   target: 'http://127.0.0.1:3000',
+      //   pathRewrite: {
+      //     '^/meta': '/',
+      //   },
+      // },
       '/meta': {
         changeOrigin: true,
         ws: true,
-        target: 'http://192.168.81.170:20004',
+        target: 'http://192.168.50.141:20004/',
         pathRewrite: {
-          '^/meta': '/meta',
+          '^/meta': '/',
         },
       },
     },

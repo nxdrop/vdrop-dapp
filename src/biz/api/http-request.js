@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import { HEADER_TOKEN_KEY } from '../../libs/frame-config'
+import { HEADER_TOKEN_KEY } from '../config'
 
 const service = axios.create({
   timeout: 50000,

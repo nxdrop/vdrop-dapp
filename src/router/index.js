@@ -37,6 +37,18 @@ const routes = [
       },
     ],
   },
+  {
+    path: '/nfts',
+    name: 'nfts',
+    component: () => import(/*webpackChunkName: "signup" */ '@pages/nft/MyNfts.vue'),
+    children: [
+      {
+        path: 'mine',
+        name: 'myNft',
+        component: () => import(/*webpackChunkName: "player" */ '@pages/nft/MyNfts.vue'),
+      },
+    ],
+  },
 ]
 
 const router = new VueRouter({

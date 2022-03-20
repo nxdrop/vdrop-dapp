@@ -73,6 +73,7 @@
                         small
                         >Template download</v-btn
                       >
+                      <!-- <span>{{ selectedAddress }}</span> -->
                     </div>
                   </template>
                 </v-file-input>
@@ -90,6 +91,9 @@
               <div class="meta-rule-btn px-2">
                 <v-btn text color="orange">add custom rule</v-btn>
               </div>
+            </v-col>
+            <v-col cols="12" md="8" sm="12" class="">
+              <span>Merkel Root: </span><span>{{ merkleRoot }}</span>
             </v-col>
 
             <v-col cols="12" md="12">
@@ -226,6 +230,7 @@
 <script>
 import WhiteListSteper from './WhiteListSteper.vue'
 import { getMetaDropNftBaseUri } from '@lib/env/safe-env.js'
+import { mapState, mapGetters } from 'vuex'
 export default {
   name: 'AddNFTDrop',
   components: { WhiteListSteper },
@@ -274,6 +279,7 @@ export default {
     showUseMetaSc() {
       return this.useMetaSc === 1
     },
+    ...mapState('wal', ['selectedAddress']),
   },
   watch: {
     tsListener(n, old) {
@@ -294,29 +300,44 @@ export default {
       if (v >= 50 && v < 80) return 'deep-orange lighten-2'
       if (v >= 80) return 'red accent-2'
     },
-    calcWhiteStep() {
-      if (!this.merkleRoot && this.dropAmount > 0) {
-        return 3
-      }
-      if (this.projName) {
-        return 2
-      }
-      return 1
-    },
     setDropFilterTypeHandler(typ) {
       this.filterType = typ
     },
-    whiteFileChangeHandler(file) {
-      console.log('>>>>>>>>>file>>>>>>', file)
-      if (!this.whitelistFile) {
+    async whiteFileChangeHandler(file) {
+      if (!file) {
         this.merkleRoot = ''
         this.dropAmount = 0
+      } else if (file && this.selectedAddress) {
+        const vm = this
+        const currAddress = this.selectedAddress
+
+        try {
+          const formData = new FormData()
+          formData.append('file', file)
+          formData.append('selectedAddress', currAddress)
+          const resp = await vm.$api('storage.upload', formData)
+          console.log('>>>>>Upload>>>>>>>>>>', resp)
+        } catch (ex) {
+          console.log('>>>>>>>>>>>>>>>>>>>>>>', ex)
+        }
       }
+
+      this.whitelistFile = file || null
     },
     // click handler
-    uploadFileHandler() {
-      this.merkleRoot === 'a'
-      this.dropAmount = 10
+    async uploadFileHandler() {
+      const vm = this
+      try {
+        const file = this.whitelistFile
+        const currAddress = this.selectedAddress
+        const formData = new FormData()
+        formData.append('file', file)
+        formData.append('selectedAddress', currAddress)
+        const resp = await vm.$api('storage.upload', formData)
+        console.log('>>>>>Upload>>>>>>>>>>', resp)
+      } catch (ex) {
+        console.log('>>>>>>>>>>>>>>>>>>>>>>', ex)
+      }
     },
     // get
     submitDropHandler() {

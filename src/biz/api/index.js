@@ -20,6 +20,8 @@ export default function api(apikey, data = {}) {
   let url = /^(\/).*/.test(allApiList[apikey].url)
     ? `${META_PREVIOUS}${allApiList[apikey].url}`
     : `${META_PREVIOUS}/${allApiList[apikey].url}`
+
+  console.log('>>>>>>>>>>>>>>>Axiso Proxy>>>>>', url)
   let req = {
     url,
     method,

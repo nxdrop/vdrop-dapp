@@ -12,7 +12,7 @@
       </v-container>
     </v-main>
     <v-footer>
-      <v-container>Footer</v-container>
+      <v-container>MetaDrop Labs</v-container>
     </v-footer>
   </v-app>
 </template>

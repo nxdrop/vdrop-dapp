@@ -15,6 +15,7 @@
       v-if="walletConnected"
       key="metaUserMenuBtn"
       ref="metaTopMenu"
+      v-model="opened"
       content-class="muser-popover"
       v-bind="{ loading: true }"
       offset-y
@@ -26,15 +27,58 @@
       transition="scale-transition"
       :close-on-content-click="false"
       nudge-bottom="20"
-      nudge-right="-90"
+      nudge-right="-130"
       :eager="true"
+      persistent
     >
       <template #activator="{ on, attrs }">
         <v-btn :loading="envChecking" color="primary" rounded width="180" v-bind="attrs" :class="className" v-on="on">{{
-          'LOgin'
+          shortAddress
         }}</v-btn>
       </template>
-      <v-sheet class="muser-menu-popover"> hshd </v-sheet>
+      <v-sheet class="muser-popover__inner">
+        <div class="muser-popover__header">
+          <span class="mpopover-title">{{ shortAddress || 'My' }}</span>
+          <v-icon @click="closeMuserPopoverHandler">mdi-close</v-icon>
+        </div>
+        <div class="muser-popover__content">
+          <div class="muser-btnbox btn-createdrop" @click="createDropHandler">
+            <span class="text">Create Drop NFT</span>
+            <span>
+              <v-img :src="dropSvg" alt="MetaDrop" :width="iconSize" :height="iconSize"></v-img>
+            </span>
+          </div>
+          <div class="muser-btnbox btn-apply" @click="myNftHandler">
+            <span class="text">NFTs I've got</span>
+            <span>
+              <v-img :src="monkeyNft" alt="NFTs" :width="iconSize - 4" :height="iconSize - 4"></v-img>
+            </span>
+          </div>
+
+          <v-card class="muser-regist__card" elevation="0" outlined rounded>
+            <div class="form-tip">
+              <span class="tip-text"> {{ registText }}</span>
+            </div>
+            <div class="muser-regist__form">
+              <v-text-field dense label="Email" :value="inputEmail"></v-text-field>
+              <!-- <v-text-field dense label="Tiwtter" :value="inputTiwtter"></v-text-field>
+              <v-text-field dense label="Discord" :value="inputDiscord"></v-text-field> -->
+            </div>
+
+            <div class="muser-regist__action">
+              <v-btn small outlined color="#8f00ff" plain @click="registEmailHandler">Sign & Regist</v-btn>
+            </div>
+          </v-card>
+        </div>
+        <div class="muser-popover__footer">
+          <div>
+            <span>New to Drop?</span>
+          </div>
+          <div>
+            <span>Learn more about MetaDrops</span>
+          </div>
+        </div>
+      </v-sheet>
     </v-menu>
   </div>
 </template>
@@ -42,6 +86,9 @@
 <script>
 import { mapGetters } from 'vuex'
 import { connectMetamask } from '@lib/web3/metamask'
+import mmIcon from '@assets/icons/metamask.png'
+import monkeyNft from '@assets/icons/monkey-nft.png'
+import dropSvg from '@assets/drop.svg'
 
 const DEF_CONNECT_BTN_TEXT = 'Connect Wallet'
 export default {
@@ -55,14 +102,24 @@ export default {
   },
   data() {
     return {
+      iconSize: 32,
+      mmIcon,
+      dropSvg,
+      monkeyNft,
       btnText: DEF_CONNECT_BTN_TEXT,
+      opened: false,
+      registText: 'If you want to get a higher airdrop weight, please enter your info registration here.',
+      inputEmail: '',
+      inputTiwtter: '',
+      inputDiscord: '',
     }
   },
   computed: {
     ...mapGetters('web3', ['metamaskInjected', 'envChecking']),
-    ...mapGetters('wal', ['walletConnected']),
+    ...mapGetters('wal', ['walletConnected', 'shortAddress']),
     ...mapGetters(['getConnectBtn']),
   },
+  mounted() {},
   methods: {
     async unConnectHandler() {
       if (!this.metamaskInjected) {
@@ -89,12 +146,165 @@ export default {
           })
       }
     },
+    closeMuserPopoverHandler() {
+      this.opened = false
+    },
+    createDropHandler() {
+      this.$router.push('/drop/nft', () => {
+        this.opened = false
+      })
+    },
+    myNftHandler() {
+      this.$router.push('/nfts/mine', () => {
+        this.opened = false
+      })
+    },
+    registEmailHandler() {
+      if (!this.inputEmail) {
+        window.alert('Email required.')
+        return
+      }
+      let message = {
+        email: this.inputEmail,
+      }
+      console.log('Regist>>>>>>>>>>>>>>>>>', message)
+    },
   },
 }
 </script>
 <style lang="scss" scoped>
 .muser {
   &-popover {
+    width: 350px;
+    height: 530px;
+    background: transparent;
+
+    &.v-menu__content {
+      border-radius: 12px;
+    }
+
+    &__inner {
+      flex: 1 1 100%;
+      display: flex;
+      flex-flow: column nowrap;
+      height: 100%;
+      padding: 2px 0px 10px 0px;
+
+      & > div {
+        padding-left: 24px;
+        padding-right: 24px;
+
+        &.muser-popover__header {
+          padding-right: 2px;
+          padding-left: 12px;
+        }
+      }
+    }
+
+    &__header {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(#ccc, 0.3);
+
+      & > span.mpopover-title {
+        font-size: 1rem;
+      }
+    }
+
+    &__content {
+      flex: 1 1 100%;
+      padding-top: 24px;
+      padding-bottom: 12px;
+      display: flex;
+      flex-flow: column nowrap;
+      justify-content: flex-start;
+      align-items: center;
+
+      & > div.muser-btnbox {
+        cursor: pointer;
+        flex: 0 0 auto;
+        width: 100%;
+        line-height: 2.25rem;
+        padding: 6px 12px;
+        border-radius: 12px;
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+        align-items: center;
+
+        color: #fff;
+
+        &:not(:last-child) {
+          margin-bottom: 12px;
+        }
+
+        img {
+          width: 40px;
+          height: 40px;
+        }
+
+        &.btn-apply {
+          background: linear-gradient(267.54deg, rgb(255, 220, 36) 1.63%, rgb(255, 92, 0) 98.05%);
+        }
+
+        &.btn-createdrop {
+          background: linear-gradient(267.56deg, rgb(5, 0, 255) 0%, rgb(143, 0, 255) 97.07%);
+        }
+
+        &.btn-nfts {
+          border: 1px solid #eaeaea;
+          color: #333;
+        }
+      }
+    }
+
+    &__footer {
+      span {
+        font-size: 0.75rem;
+      }
+
+      & > div {
+        text-align: center;
+        width: 100%;
+        line-height: 1;
+      }
+    }
+  }
+
+  &-regist {
+    &__card {
+      flex: 1 1 auto;
+      width: 100%;
+      // padding: 4px 12px;
+      display: flex;
+      flex-flow: column nowrap;
+
+      div.form-tip {
+        background: rgba(#ccc, 0.7);
+        line-height: 1.05rem;
+        color: #8f00ff;
+        padding: 4px;
+      }
+
+      span.tip-text {
+        text-align: center;
+        line-height: 1;
+        font-size: 0.75rem;
+        font-weight: 200;
+      }
+    }
+
+    &__form {
+      flex: 1 1 auto;
+      padding: 6px 12px;
+      padding-top: 24px;
+    }
+
+    &__action {
+      text-align: center;
+      padding: 6px 12px;
+    }
   }
 }
 </style>

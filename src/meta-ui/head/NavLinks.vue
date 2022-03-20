@@ -2,14 +2,14 @@
   <nav class="meta-links px-2 ms-4" :class="ui.xsHideCls">
     <ul>
       <li>
-        <a href="#" class="nav-link"><span>Home</span></a>
+        <a href="#" class="nav-link" @click="navLinkHandler('/')"><span>Home</span></a>
       </li>
       <li>
         <a href="#" class="nav-link" @click="navLinkHandler('/drop/nft')"><span>Create Drop</span></a>
       </li>
-      <li>
+      <!-- <li>
         <a href="#" class="nav-link"><span>NFT</span></a>
-      </li>
+      </li> -->
     </ul>
   </nav>
 </template>
@@ -23,6 +23,7 @@ export default {
   computed: { ...mapState(['ui']) },
   methods: {
     navLinkHandler(pathname) {
+      if (pathname === this.$route.pathname) return
       this.$router.push(pathname)
     },
   },

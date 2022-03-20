@@ -83,10 +83,22 @@ const user = {
     url: '/user/registerNext',
     method: 'post',
   },
+  uploadFile: {
+    url: '/upload',
+    method: 'post',
+  },
+}
+
+const storage = {
+  upload: {
+    url: '/upload',
+    method: 'post',
+  },
 }
 
 const allApis = {
   user,
+  storage,
 }
 
 export default flatObjectApi(allApis)
