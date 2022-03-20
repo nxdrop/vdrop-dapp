@@ -60,7 +60,7 @@
               <span class="tip-text"> {{ registText }}</span>
             </div>
             <div class="muser-regist__form">
-              <v-text-field dense label="Email" :value="inputEmail"></v-text-field>
+              <v-text-field dense label="Email" :value="inputEmail" @change="(v) => (inputEmail = v)"></v-text-field>
               <!-- <v-text-field dense label="Tiwtter" :value="inputTiwtter"></v-text-field>
               <v-text-field dense label="Discord" :value="inputDiscord"></v-text-field> -->
             </div>
@@ -84,11 +84,14 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import { connectMetamask } from '@lib/web3/metamask'
 import mmIcon from '@assets/icons/metamask.png'
 import monkeyNft from '@assets/icons/monkey-nft.png'
 import dropSvg from '@assets/drop.svg'
+
+import { getWeb3js } from '@lib/web3'
+import { signByPersonal } from '@lib/web3/sign-util'
 
 const DEF_CONNECT_BTN_TEXT = 'Connect Wallet'
 export default {
@@ -118,6 +121,7 @@ export default {
     ...mapGetters('web3', ['metamaskInjected', 'envChecking']),
     ...mapGetters('wal', ['walletConnected', 'shortAddress']),
     ...mapGetters(['getConnectBtn']),
+    ...mapState('wal', ['selectedAddress']),
   },
   mounted() {},
   methods: {
@@ -159,15 +163,28 @@ export default {
         this.opened = false
       })
     },
-    registEmailHandler() {
+    async registEmailHandler() {
       if (!this.inputEmail) {
-        window.alert('Email required.')
+        this.$toast('Email required', 'warn', 3000)
         return
       }
-      let message = {
-        email: this.inputEmail,
+
+      try {
+        const opts = {
+          selectedAddress: this.selectedAddress,
+          email: this.inputEmail,
+          tiwtter: this.inputTiwtter || '',
+          discord: this.inputDiscord || '',
+        }
+        console.log('Regist>>>opts>>>>>>>>>>>>>>', opts)
+        const web3js = await getWeb3js()
+        const resp = await signByPersonal(web3js, opts)
+        console.log('Regist>>>>>>>>>ex>>>>>>>>', resp)
+        this.$toast('Signed Success,but no call back api.', 'success')
+      } catch (ex) {
+        console.log('Regist>>>>>>>>>ex>>>>>>>>', ex)
+        this.$toast(`Signed fail.${ex.message}`, 'fail', 8000)
       }
-      console.log('Regist>>>>>>>>>>>>>>>>>', message)
     },
   },
 }

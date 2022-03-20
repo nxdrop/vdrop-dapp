@@ -330,6 +330,9 @@ export default {
       try {
         const file = this.whitelistFile
         const currAddress = this.selectedAddress
+
+        if (!file) throw new Error('Please select a whitelist file.')
+        if (!currAddress) throw new Error('MetaMask unconnected.')
         const formData = new FormData()
         formData.append('file', file)
         formData.append('selectedAddress', currAddress)
@@ -337,6 +340,7 @@ export default {
         console.log('>>>>>Upload>>>>>>>>>>', resp)
       } catch (ex) {
         console.log('>>>>>>>>>>>>>>>>>>>>>>', ex)
+        this.$toast(ex.message, 'fail', 6000)
       }
     },
     // get
