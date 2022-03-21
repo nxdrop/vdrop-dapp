@@ -8,8 +8,10 @@ const pkgJson = require('../package.json')
 
 const { PrintInfo, PrintError, PrintRun, PrintOK } = require('../ci/printer')
 
-const TARGET_PROJECT = '../nxdrop-ghpages'
-const TARGET_BRANCH_NAME = 'dev-demo'
+require('dotenv').config({ path: baseResovle('bin', '.env') })
+
+const TARGET_PROJECT = '../nxdrop.github.io'
+const TARGET_BRANCH_NAME = 'gh-pages'
 const TARGET_PROJECT_DOCS = 'docs'
 const TARGET_RELEASE_NAME = 'RELEASE.md'
 const BUILD_CDM = 'build:gh'
@@ -98,6 +100,8 @@ function copyToTargetAndPush(targetPath, options = {}) {
 
   fs.copySync(dist, targetDocsPath, { overwrite: true })
 
+  writeCName(targetDocsPath, process.env.CNAME || '')
+
   const pushComment = `docs: publish v${pkgJson.version}-${commitHash}`
 
   const releaseFile = R(targetPath, TARGET_RELEASE_NAME)
@@ -121,6 +125,12 @@ function copyToTargetAndPush(targetPath, options = {}) {
   return ghPageName
     ? `Publish Complete \nVisit this url : https://nxdrop.github.io/${ghPageName}\n`
     : 'Publish Complete \n You can login your github account to see result.'
+}
+
+function writeCName(targetDocsPath, cname) {
+  if (cname) {
+    fs.writeFileSync(R(targetDocsPath, 'CNAME'), cname)
+  }
 }
 
 /**
