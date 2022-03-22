@@ -4,6 +4,8 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 import ui from './modules/ui'
+import biz from './modules/biz'
+import sol from './modules/sol'
 import web3 from './modules/web3'
 import wallet from './modules/wallet'
 
@@ -32,8 +34,10 @@ export default new Vuex.Store({
   },
   modules: {
     ui,
+    biz,
     web3,
     wal: wallet,
+    sol,
   },
   strict: process.env.NODE_ENV !== 'production',
 })

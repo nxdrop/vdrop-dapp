@@ -15,7 +15,7 @@ module.exports = {
       // '/meta': {
       //   changeOrigin: true,
       //   ws: true,
-      //   target: 'http://127.0.0.1:3000',
+      //   target: 'http://192.168.94.186:3000',
       //   pathRewrite: {
       //     '^/meta': '/',
       //   },
@@ -23,9 +23,9 @@ module.exports = {
       '/meta': {
         changeOrigin: true,
         ws: true,
-        target: 'http://192.168.50.141:20004/',
+        target: 'http://nftdrop.aibyb.com.cn/',
         pathRewrite: {
-          '^/meta': '/',
+          '^/meta': '',
         },
       },
     },

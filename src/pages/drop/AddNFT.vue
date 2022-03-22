@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row class="justify-center py-4">
-      <h3>创建我的 NFT 空投项目</h3>
+      <h3>Create My Drop</h3>
     </v-row>
     <v-row class="justify-center py-4">
       <v-col md="11" sm="12">
@@ -9,7 +9,7 @@
           <v-card-title class="meta-drop-card-title">
             <div class="meta-toggle-wrap">
               <v-btn-toggle :value="filterType" mandatory>
-                <v-btn>白名单空投</v-btn>
+                <v-btn>whitelist drop</v-btn>
                 <!-- <v-btn @click="setDropFilterTypeHandler(2)">自定义筛选条件</v-btn> -->
               </v-btn-toggle>
             </div>
@@ -20,8 +20,8 @@
           <v-form ref="form" class="px-2" name="nftForm">
             <v-col cols="12" md="8" sm="12">
               <v-text-field
-                name="name"
-                :value="projName"
+                v-model="projName"
+                name="projName"
                 :rules="rules.nameRules"
                 label="Project Name"
                 required
@@ -30,25 +30,31 @@
             </v-col>
             <v-col cols="12" md="8" sm="12">
               <v-text-field
+                v-model="projUrl"
                 name="projUrl"
-                :value="projUrl"
                 label="Project Official Site"
                 required
                 outlined
               ></v-text-field>
             </v-col>
             <v-col cols="12" md="8" sm="12">
-              <v-text-field name="projLogo" :value="projUrl" label="Project Logo Url" required outlined></v-text-field>
+              <v-text-field
+                v-model="projLogo"
+                name="projLogo"
+                label="Project Logo Url"
+                required
+                outlined
+              ></v-text-field>
             </v-col>
             <v-col cols="12" md="8" sm="12">
-              <v-textarea :value="projIntro" solo name="input-7-4" label="Project Intro" outlined></v-textarea>
+              <v-textarea v-model="projIntro" solo name="input-7-4" label="Project Intro" outlined></v-textarea>
             </v-col>
 
             <v-divider></v-divider>
             <!-- Swtich NFT Contract -->
 
             <v-row v-if="filterType === 1" key="uploadAddressInputRow" align="center" class="d-flex mt-2">
-              <v-col cols="12" md="10" sm="12">
+              <v-col cols="12" md="8" sm="12">
                 <v-file-input
                   ref="whitelistFileInput"
                   dense
@@ -57,11 +63,12 @@
                   name="whitelistFile"
                   :value="whitelistFile"
                   outlined
+                  :disabled="!selectedAddress"
                   @change="whiteFileChangeHandler"
                 >
                   <template #append-outer>
                     <div class="meta-file-appender">
-                      <v-btn text plain outlined small class="me-2" @click="uploadFileHandler">Upload</v-btn>
+                      <!-- <v-btn text plain outlined small class="me-2" @click="uploadFileHandler">Upload</v-btn> -->
                       <v-btn
                         tag="a"
                         text
@@ -102,11 +109,33 @@
                 <v-radio label="Use my NFT contract mint" value="2" @click="() => (useMetaSc = 2)"></v-radio>
               </v-radio-group>
             </v-col>
-
             <v-col cols="12" md="8" sm="12">
               <v-text-field
+                v-model="nftname"
+                name="nftname"
+                hint="Entry your NFT name"
+                label="NFT name"
+                required
+                outlined
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12" md="8" sm="12">
+              <v-text-field
+                v-model="image"
+                name="image"
+                hint="image Url"
+                label="NFT Image URI"
+                required
+                outlined
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12" md="8" sm="12">
+              <v-textarea v-model="nftDescription" solo name="input-7-4" label="NFT Description" outlined></v-textarea>
+            </v-col>
+            <v-col cols="12" md="8" sm="12">
+              <v-text-field
+                v-model="dropAmount"
                 name="dropAmount"
-                :value="dropAmount"
                 hint="Entry an number of drop amount"
                 label="Drop amount"
                 type="number"
@@ -183,7 +212,7 @@
                     <v-text-field
                       name="nftBaseUrl"
                       :value="t.value"
-                      hint="an number 0~100"
+                      hint="an number 0~100 or a percent decimals"
                       label="trait value"
                       required
                       outlined
@@ -217,7 +246,15 @@
           <v-card-actions class="meta-actions-wrap">
             <v-row key="whitleBtns" class="justiy-center">
               <v-col cols="12" class="px-2"
-                ><v-btn color="orange" block text @click="submitDropHandler">Submit</v-btn></v-col
+                ><v-btn
+                  color="orange"
+                  block
+                  text
+                  :outlined="!selectedAddress"
+                  :disabled="!selectedAddress"
+                  @click="submitDropHandler"
+                  >Submit</v-btn
+                ></v-col
               >
             </v-row>
           </v-card-actions>
@@ -231,6 +268,7 @@
 import WhiteListSteper from './WhiteListSteper.vue'
 import { getMetaDropNftBaseUri } from '@lib/env/safe-env.js'
 import { mapState, mapGetters } from 'vuex'
+import { validFormData } from './add-nft'
 export default {
   name: 'AddNFTDrop',
   components: { WhiteListSteper },
@@ -242,6 +280,7 @@ export default {
       projName: '',
       projUrl: '',
       projIntro: '',
+      projLogo: '',
       whiteStepVal: 1,
       customStepVal: 2,
       whitelistFile: null,
@@ -249,6 +288,9 @@ export default {
       opensea: true,
       useMetaSc: 1,
       nftScAddress: '',
+      nftname: '',
+      image: '',
+      nftDescription: '',
       rules: {
         nameRules: [(v) => !!v || 'Name is required'],
         addrFileRules: [],
@@ -273,24 +315,25 @@ export default {
     }
   },
   computed: {
+    ...mapState('wal', ['selectedAddress']),
+    ...mapGetters('sol', ['nftBaseUri']),
     dyncTraits() {
       return this.traits
     },
     showUseMetaSc() {
       return this.useMetaSc === 1
     },
-    ...mapState('wal', ['selectedAddress']),
   },
   watch: {
-    tsListener(n, old) {
-      // if (n !== old) {
-      // }
+    nftBaseUri(n, old) {
+      if (n) {
+        this.nftBaseUrl = n
+      }
     },
-    merkleRoot(newRoot, oldRoot) {},
   },
   mounted() {
     const baseUri = getMetaDropNftBaseUri()
-    this.nftBaseUrl = baseUri
+    this.nftBaseUrl = this.nftBaseUri || baseUri
   },
   methods: {
     getCircleColor(v) {
@@ -304,9 +347,13 @@ export default {
       this.filterType = typ
     },
     async whiteFileChangeHandler(file) {
+      const metaSteper = this.$refs.whiteListStepComp
       if (!file) {
         this.merkleRoot = ''
         this.dropAmount = 0
+        if (typeof metaSteper.setStepValue === 'function') {
+          metaSteper.setStepValue(1)
+        }
       } else if (file && this.selectedAddress) {
         const vm = this
         const currAddress = this.selectedAddress
@@ -316,7 +363,19 @@ export default {
           formData.append('file', file)
           formData.append('selectedAddress', currAddress)
           const resp = await vm.$api('storage.upload', formData)
-          console.log('>>>>>Upload>>>>>>>>>>', resp)
+          const { code, msg, data } = resp
+          console.log('>>>>>Upload>>>>>>>>>>', code, resp)
+          if (code !== 0) {
+            vm.$toast(msg || 'upload fail', 'fail', 6000)
+            return
+          } else {
+            const { merkleRoot, airdropsAddressCount } = data
+            vm.setUploadResult(merkleRoot, airdropsAddressCount)
+
+            if (typeof metaSteper.setStepValue === 'function') {
+              metaSteper.setStepValue(2)
+            }
+          }
         } catch (ex) {
           console.log('>>>>>>>>>>>>>>>>>>>>>>', ex)
         }
@@ -337,17 +396,39 @@ export default {
         formData.append('file', file)
         formData.append('selectedAddress', currAddress)
         const resp = await vm.$api('storage.upload', formData)
-        console.log('>>>>>Upload>>>>>>>>>>', resp)
+        const { code, msg, data } = resp.data
+
+        if (code !== 0) {
+          vm.$toast(msg || 'upload fail', 'fail', 6000)
+          return
+        } else {
+          const { merkleRoot, airdropsAddressCount } = data
+          vm.setUploadResult(merkleRoot, airdropsAddressCount)
+        }
       } catch (ex) {
-        console.log('>>>>>>>>>>>>>>>>>>>>>>', ex)
         this.$toast(ex.message, 'fail', 6000)
       }
     },
-    // get
-    submitDropHandler() {
-      const metaSteper = this.$refs.whiteListStepComp
-      if (typeof metaSteper.setStepValue === 'function') {
-        metaSteper.setStepValue(2)
+    setUploadResult(merkleRoot, amout) {
+      console.log('>>>>>>>>', merkleRoot, amout)
+      this.merkleRoot = merkleRoot
+      this.dropAmount = amout
+    },
+    // Submit
+    async submitDropHandler() {
+      try {
+        const submitData = validFormData(this)
+        console.log('>>resp>>>>>>>>>>', submitData)
+        const resp = await this.$api('drop.create_nft', submitData)
+        console.log('>>resp>>>>>>>>>>', resp)
+        const { code, msg, data } = resp
+        if (code !== 0) {
+          throw new Error(msg || 'Create Drop Fial')
+        } else {
+          this.$toast('Create Drop Success', 'success')
+        }
+      } catch (ex) {
+        this.$toast(ex.message, 'fail', 6000)
       }
     },
     nextStepHandler(typ) {

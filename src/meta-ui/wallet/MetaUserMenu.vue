@@ -135,8 +135,10 @@ export default {
         const vm = this
         connectMetamask()
           .then((resp) => {
-            console.log(resp)
+            console.log('>>>>>>>>>>>connectMetamask>>>>>>>', resp)
             vm.$store.dispatch('wal/setWalletState', resp)
+
+            vm.$store.dispatch('sol/updateDropNftBaseInfo', resp.chainId)
             // this.metamaskBtnText = resp.selectedAddress
             // if (SIGNUP_ROUTES.find((v) => v === vm.$route.path)) {
             //   vm.$store.dispatch('wal/setWalletState', resp)
@@ -149,6 +151,7 @@ export default {
           })
           .catch((e) => {
             console.log(e)
+            this.$toast(e.message, 'warn', 10000)
           })
       }
     },

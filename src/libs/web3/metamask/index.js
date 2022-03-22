@@ -1,5 +1,7 @@
 import { checkEvmProvider } from '..'
 
+import { checkSupport } from '@/libs/networks'
+
 export const connectMetamask = async () => {
   try {
     const ethereum = checkEvmProvider()
@@ -7,6 +9,8 @@ export const connectMetamask = async () => {
     const accounts = await ethereum.request({ method: 'eth_requestAccounts' })
 
     const chainId = await ethereum.request({ method: 'eth_chainId' })
+
+    const network = checkSupport(chainId)
 
     return {
       selectedAddress: accounts[0],

@@ -1,5 +1,6 @@
 <template>
   <v-menu
+    v-if="!!selectedAddress"
     ref="metaNotificationDrop"
     v-model="opened"
     content-class="meta-belldrop"
@@ -41,7 +42,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import bellSvg from '@assets/bell.svg'
 export default {
   name: 'NotificationBell',
@@ -65,6 +66,7 @@ export default {
   },
   computed: {
     unreadNum: () => (this.unreadMessages ? this.unreadMessages.length : 0),
+    ...mapState('wal', ['selectedAddress']),
   },
   methods: {
     closeWalletModal() {

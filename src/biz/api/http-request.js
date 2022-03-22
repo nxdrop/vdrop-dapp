@@ -32,4 +32,23 @@ service.interceptors.request.use(
   (err) => Promise.reject(err)
 )
 
+service.interceptors.response.use(
+  (response) => {
+    let { data } = response
+
+    // console.log('>>>>data>>>response>>>>>>>', data, response)
+    if (typeof data === 'string') {
+      try {
+        data = JSON.parse(data)
+      } catch (ex) {
+        console.log('API handler json fail :', ex)
+      }
+    }
+    return data
+  },
+  (err) => {
+    throw new Error(err)
+  }
+)
+
 export default service

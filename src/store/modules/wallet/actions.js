@@ -8,3 +8,5 @@ import * as types from './mutation-types'
 export const setWalletState = ({ commit }, state = {}) => {
   commit(types.UPD_WALLET_BASE_STATE, state)
 }
+
+export const queryMyBalance = async ({ commit }, chainId) => {}

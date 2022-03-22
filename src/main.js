@@ -8,6 +8,8 @@ import vuetify from './plugins/vuetify'
 import '@mdi/font/css/materialdesignicons.css'
 import Toast from './meta-ui/toast'
 
+import { DropNFTInstance } from '@biz/abi/drop-nft-sdk'
+
 Vue.use(Toast)
 
 Vue.config.productionTip = false
@@ -24,5 +26,5 @@ const dapp = new Vue({
 
 if (process.env.NODE_ENV === 'development') {
   global.nxdrop = dapp
-  console.log('>>>>>>>>>>>>>>>>>>dpp>', dapp.$toast)
+  window.DropNFTInstance = DropNFTInstance
 }

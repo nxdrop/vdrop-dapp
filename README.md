@@ -60,7 +60,31 @@ yarn install
 
 > 
 
+### 或去项目列表
+
+> aridrops/list
+
+- response 
+
+```js
+{
+  code:0,
+  msg:'ok',
+  data:[
+    {
+        dropid: dropid,
+        info: info,
+        merkleRoot: merkleRoot
+    }
+  ]
+}
+```
+
 ### 获取用户 持有 NFT 与项目对应关系list
 
 > 通过钱包获取
+
+```json
+
+```
 

@@ -89,15 +89,27 @@ const user = {
   },
 }
 
+const drop = {
+  create_nft: {
+    url: '/airdrops/createDrop',
+    method: 'post',
+  },
+  list: {
+    url: '/airdrops/listDrop',
+    method: 'get',
+  },
+}
+
 const storage = {
   upload: {
-    url: '/upload',
+    url: '/import/users',
     method: 'post',
   },
 }
 
 const allApis = {
   user,
+  drop,
   storage,
 }
 

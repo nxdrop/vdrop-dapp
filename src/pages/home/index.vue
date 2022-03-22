@@ -1,107 +1,70 @@
 <template>
   <v-container>
-    <v-col class="meta-cards-wrap" md="10" xs="12">
-      <v-row>
-        <v-col v-for="(item, idx) in activedDrops" :key="idx" class="m-col">
-          <v-card class="meta-drop-card" elevation="0" outlined>
-            <v-list-item three-line>
-              <v-list-item-content>
-                <div class="text-overline">
-                  <span>{{ item.name }}</span>
-                </div>
-                <v-list-item-title> </v-list-item-title>
-                <v-list-item-subtitle>
-                  {{ item.desc || '' }}
-                </v-list-item-subtitle>
-                <div class="token-wrap">
-                  <span class="m-drop-total">{{ item.total }}</span
-                  ><span class="m-symbol">{{ item.symbol }}</span>
-                </div>
-              </v-list-item-content>
-              <v-list-item-avatar size="80" tile color="grey"></v-list-item-avatar>
-            </v-list-item>
+    <v-row>
+      <v-col class="meta-cards-wrap" cols="12" md="10" sm="12">
+        <v-row>
+          <v-col v-for="(item, idx) in dropItems" :key="idx" class="m-col">
+            <v-card class="meta-drop-card" elevation="0" outlined>
+              <v-list-item three-line>
+                <v-list-item-content>
+                  <div class="text-overline">
+                    <span>{{ item.name }}</span>
+                  </div>
+                  <v-list-item-title> </v-list-item-title>
+                  <v-list-item-subtitle>
+                    {{ item.description || '' }}
+                  </v-list-item-subtitle>
+                  <div class="token-wrap">
+                    <span class="m-drop-label"> Total Drop </span>
+                    <span class="m-drop-total">{{ item.dropTotal }}</span>
+                  </div>
+                </v-list-item-content>
+                <v-list-item-avatar size="80" tile color="grey">
+                  <v-img v-if="item.logoUri" :key="'img_' + idx" :src="item.logoUri"></v-img>
+                </v-list-item-avatar>
+              </v-list-item>
 
-            <v-card-actions>
-              <v-btn rounded outlined small text class="px-6">Claim</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-col>
+              <v-card-actions>
+                <v-btn rounded outlined small text class="px-6">Claim</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name: 'HomeIndex',
   components: {},
   data() {
     return {
-      activedDrops: [
-        {
-          name: 'Next Drop',
-          symbol: 'NDT',
-          total: 200,
-          iconImg: '',
-          desc: 'Drop descriptions aaaa',
-          unitPrice: 12.5,
-        },
-        {
-          name: 'DeDrop',
-          symbol: 'DDT',
-          total: 200,
-          iconImg: '',
-          desc: 'Drop descriptions aaaa',
-
-          unitPrice: 12.5,
-        },
-        {
-          name: 'NFT Drop',
-          symbol: '',
-          total: 200,
-          iconImg: '',
-          desc: 'Drop descriptions aaaa',
-          unitPrice: 312.5,
-        },
-        {
-          name: '',
-          symbol: '',
-          total: 200,
-          iconImg: '',
-          desc: 'Drop descriptions aaaa',
-          unitPrice: 12.5,
-        },
-        {
-          name: '',
-          symbol: '',
-          total: 200,
-          iconImg: '',
-          unitPrice: 12.5,
-        },
-        {
-          name: '',
-          symbol: '',
-          total: 200,
-          iconImg: '',
-          unitPrice: 12.5,
-        },
-        {
-          name: '',
-          symbol: '',
-          total: 200,
-          iconImg: '',
-          unitPrice: 12.5,
-        },
-      ],
+      activedDrops: [],
     }
   },
-  computed: {},
-  methods: {},
+  computed: {
+    ...mapGetters('biz', ['dropItems']),
+  },
+  mounted() {
+    this.getDroplist()
+  },
+  methods: {
+    async getDroplist() {
+      try {
+        await this.$store.dispatch('biz/loadDropList')
+      } catch (ex) {
+        this.$toast(ex.message, 'fail', 6000)
+      }
+    },
+  },
 }
 </script>
 <style lang="scss" scoped>
 .m-col {
-  flex: 0 0 25%;
+  flex: 0 0 33.33333%;
   div.meta-drop-card {
     height: 175px;
     display: flex;
@@ -112,6 +75,12 @@ export default {
   span.m-symbol {
     margin-left: 0.25em;
     font-size: 0.85em;
+  }
+
+  .token-wrap {
+    span {
+      font-size: 0.85rem;
+    }
   }
 }
 </style>

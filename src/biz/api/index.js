@@ -21,7 +21,6 @@ export default function api(apikey, data = {}) {
     ? `${META_PREVIOUS}${allApiList[apikey].url}`
     : `${META_PREVIOUS}/${allApiList[apikey].url}`
 
-  console.log('>>>>>>>>>>>>>>>Axiso Proxy>>>>>', url)
   let req = {
     url,
     method,
@@ -33,7 +32,8 @@ export default function api(apikey, data = {}) {
   } else if (apikey === 'log.info') {
     req.data = data
   } else {
-    req.data = method.toLowerCase() === 'post' ? qs.stringify(data) : data
+    // console.log('>>>>>>>>>>>>>>>>>Req Data>>>>>>>>>>>>>', data)
+    req.data = method.toLowerCase() === 'post' ? qs.stringify(data) : data // qs.stringify(data)
   }
 
   return request(req)

@@ -8,7 +8,7 @@ import {
   BINANCE_TESTNET,
   MATIC_MAINNET,
   MUMBAI_TESTNET,
-} from './evm-standard-networks'
+} from './chain-types'
 
 import {
   ETHEREUM_MAINNET_CHAIN,
@@ -35,3 +35,36 @@ export const allChains = {
 }
 
 // export con
+export const supportChainKeys = [MUMBAI_TESTNET, BINANCE_TESTNET]
+
+/**
+ *
+ */
+export const supportNetworks = supportChainKeys.reduce((prev, curr) => {
+  if (allChains[curr]) {
+    // prev = [...prev, allChains[curr]]
+    prev = prev.concat([allChains[curr]])
+  }
+  return prev
+}, [])
+
+export const checkSupport = (chainId) => {
+  const network = supportNetworks.find((n) => parseInt(n.chainId) === parseInt(chainId))
+  if (!network) {
+    const message = getSupportNames(supportNetworks)
+    throw new Error(`Only support ${message}`)
+  }
+  return network
+}
+
+export function getSupportNames(supportNetworks = []) {
+  const networkNames = supportNetworks.reduce((prev, curr) => {
+    prev = prev.concat([`${curr.chainName}[${parseInt(curr.chainId)}]`])
+
+    return prev
+  }, [])
+
+  return networkNames.length > 2
+    ? networkNames.slice(1).join(',') + ' or ' + networkNames.slice(-1)
+    : networkNames.join(',')
+}
