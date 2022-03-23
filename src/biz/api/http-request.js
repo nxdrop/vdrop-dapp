@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 import { HEADER_TOKEN_KEY } from '../config'
-const META_PREVIOUS = '/meta'
+const META_PREVIOUS = '/'
 
 const service = axios.create({
   baseURL: META_PREVIOUS,
