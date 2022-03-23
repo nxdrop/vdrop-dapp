@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 import { HEADER_TOKEN_KEY } from '../config'
+
 import { API_BASE_URI } from '../config'
 
 const service = axios.create({
