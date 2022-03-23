@@ -99,11 +99,13 @@ export default {
 
         const receipt = await claimNFT(web3js, {
           selectedAddress: selectedAddress,
-          dropid: data.dropId,
+          dropid: dropId,
           tokenId: data.tokenId,
           proof: data.proof,
           chainId,
         })
+        console.log('receipt>>', receipt)
+        vm.$toast(`Claim submit success,please blockchain confirm ${receipt.hash}`, 'success', 4000)
       } catch (ex) {
         let msg = ex.message
         console.log('ex', ex.message)

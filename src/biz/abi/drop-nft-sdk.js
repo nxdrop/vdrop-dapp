@@ -58,13 +58,13 @@ export const claimNFT = async (web3js, params = {}) => {
 
   let id = typeof dropid !== 'number' ? parseInt(dropid) : dropid
 
-  let ownerAddress
+  // let ownerAddress
 
-  ownerAddress = await inst.methods.ownerOf(id).call()
+  // ownerAddress = await inst.methods.ownerOf(id).call()
 
-  if (ownerAddress && ownerAddress.toLowerCase() === selectedAddress.toLowerCase()) {
-    throw new Error(`NFT Token [${dropid}] has claimed`)
-  }
+  // if (ownerAddress && ownerAddress.toLowerCase() === selectedAddress.toLowerCase()) {
+  //   throw new Error(`NFT Token [${dropid}] has claimed`)
+  // }
 
   const receipt = await inst.methods.claim(id, tokenId, proof).send({ from: selectedAddress })
 
