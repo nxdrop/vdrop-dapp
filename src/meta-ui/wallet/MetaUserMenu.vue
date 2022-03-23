@@ -159,7 +159,6 @@ export default {
         const vm = this
         connectMetamask()
           .then((resp) => {
-            console.log('>>>>>>>>>>>connectMetamask>>>>>>>', resp)
             vm.$store.dispatch('wal/setWalletState', resp)
 
             vm.$store.dispatch('sol/updateDropNftBaseInfo', resp.chainId)
@@ -190,9 +189,11 @@ export default {
       })
     },
     myNftHandler() {
-      this.$router.push('/nfts/mine', () => {
-        this.opened = false
-      })
+      this.$toast('Come soon...', 'info', 3000)
+      return
+      // this.$router.push('/nfts/mine', () => {
+      //   this.opened = false
+      // })
     },
     async registEmailHandler() {
       if (!this.inputEmail) {

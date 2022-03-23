@@ -104,26 +104,18 @@ export default {
           proof: data.proof,
           chainId,
         })
-        console.log('>>>>>>>>>>>>>>>>>>>', receipt)
       } catch (ex) {
-        const { message } = ex
-        console.log('>>>>>>>>ex.dat>>>>>>>>>>>', typeof message)
         let msg = ex.message
         console.log('ex', ex.message)
 
         try {
           let _emsg = ex.message
-          console.log('>>>>>>>>>>>>>>>>_emsg>>>>>>>>', typeof ex.message)
           let regex = 'Internal JSON-RPC error.'
-
           if (_emsg.startsWith(regex)) {
-            let jsonStr = _emsg.slice('')
-            console.log('>>>>>>>>>>>>>>>>_emsg>>>>>>>>', _emsg)
+            let jsonStr = _emsg.slice(regex.length).trim()
+            const errData = JSON.parse(jsonStr)
+            msg = errData.message || ex.message
           }
-
-          const errData = JSON.parse(ex.message)
-          msg = errData.message || ex.message
-          console.log('>>>>>>>>>>>>>>>>>>>>>>>>', errData)
         } catch (_) {}
 
         vm.$toast(msg, 'fail', 10000)
