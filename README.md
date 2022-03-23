@@ -42,25 +42,27 @@ yarn install
 > drop/create_drop
 
 ```js
+
 {
-  // createDrop parameter info
-  info:{
-    name:'',
-    officalSite:'',
-    logoUri:'',
-    description:''
-  },
-  dropTotal:100, // Drop NFT total
-  merkleRoot:'',// merkelRoot hash
-  onOpensea:true,
-  nftImgUri:'', // NFT image URI
-  traits:[{trait_type: '', value: 10, display_type: '' }]
+   info: {
+      name: 'projName',
+      officalSite: 'projUrl',
+      logoUri: "projLogo",
+      description: 'projIntro',
+      dropTotal:100000, // Drop NFT total
+    },
+    nftname:'',
+    description:'',
+    image:'', // NFT image URI
+    merkleRoot:'',// merkelRoot hash
+    attributes: [{trait_type: '', value: 10, display_type: '' }],
+    external_url: '',
 }
 ```
 
 > 
 
-### 或去项目列表
+### Get 项目列表
 
 > aridrops/list
 
