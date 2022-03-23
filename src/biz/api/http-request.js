@@ -1,10 +1,10 @@
 import axios from 'axios'
 
 import { HEADER_TOKEN_KEY } from '../config'
-const META_PREVIOUS = '/meta'
+import { API_BASE_URI } from '../config'
 
 const service = axios.create({
-  baseURL: META_PREVIOUS,
+  baseURL: API_BASE_URI,
   timeout: 50000,
   transformResponse: [
     function (data) {
