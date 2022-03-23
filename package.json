@@ -4,11 +4,11 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "vue-cli-service build --mode production",
     "build:gh": "cross-env PUBLIC_PATH='./' vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "lint": "prettier --write --single-quote .",
-    "dev": "vue-cli-service serve"
+    "dev": "vue-cli-service serve --mode development"
   },
   "dependencies": {
     "@mdi/font": "^6.5.95",
