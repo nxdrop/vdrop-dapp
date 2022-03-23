@@ -43,7 +43,7 @@ async function main() {
 
     return okMsg
   } catch (err) {
-    console.log('>>>>>>>>>>>>', err)
+    // console.log('>>>>>>>>>>>>', err)
     PrintError(err.message)
   }
 }
@@ -100,7 +100,7 @@ function copyToTargetAndPush(targetPath, options = {}) {
 
   fs.copySync(dist, targetDocsPath, { overwrite: true })
 
-  writeCName(targetDocsPath, process.env.CNAME || '')
+  // writeCName(targetDocsPath, process.env.CNAME || '')
 
   const pushComment = `docs: publish v${pkgJson.version}-${commitHash}`
 
@@ -123,7 +123,7 @@ function copyToTargetAndPush(targetPath, options = {}) {
   PrintInfo('Push>>>', targetPushLog)
 
   return ghPageName
-    ? `Publish Complete \nVisit this url : https://nxdrop.github.io/${ghPageName}\n`
+    ? `Publish Complete \nVisit this url : https://nxdrop.github.io\n`
     : 'Publish Complete \n You can login your github account to see result.'
 }
 

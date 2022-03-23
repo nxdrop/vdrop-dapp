@@ -19,8 +19,11 @@
                     <span class="m-drop-total">{{ item.dropTotal }}</span>
                   </div>
                 </v-list-item-content>
-                <v-list-item-avatar size="80" tile color="grey">
-                  <v-img v-if="item.logoUri" :key="'img_' + idx" :src="item.logoUri"></v-img>
+                <v-list-item-avatar v-if="item.logoUri" :key="'img_' + idx" size="80" tile color="grey">
+                  <v-img :src="item.logoUri"></v-img>
+                </v-list-item-avatar>
+                <v-list-item-avatar v-if="!item.logoUri" :key="'_spanImg' + idx" size="80" tile color="grey">
+                  {{ item.name.length > 3 ? item.name.slice(0, 3) : item.name }}
                 </v-list-item-avatar>
               </v-list-item>
 
