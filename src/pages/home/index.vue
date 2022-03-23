@@ -28,7 +28,16 @@
               </v-list-item>
 
               <v-card-actions>
-                <v-btn rounded outlined small text class="px-6">Claim</v-btn>
+                <v-btn
+                  :disabled="!currentAddress"
+                  rounded
+                  outlined
+                  small
+                  text
+                  class="px-6"
+                  @click="dropDetailHandler(item.dropid)"
+                  >Detail</v-btn
+                >
               </v-card-actions>
             </v-card>
           </v-col>
@@ -39,7 +48,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 export default {
   name: 'HomeIndex',
   components: {},
@@ -49,6 +58,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('wal', ['currentAddress']),
     ...mapGetters('biz', ['dropItems']),
   },
   mounted() {
@@ -61,6 +71,9 @@ export default {
       } catch (ex) {
         this.$toast(ex.message, 'fail', 6000)
       }
+    },
+    dropDetailHandler(id) {
+      this.$router.push({ path: `/drop_detail/${id}` })
     },
   },
 }

@@ -23,7 +23,7 @@ export function buildSignParams(userAddress, email, tiwtter = '', discord = '') 
   const ts = new Date().getTime() / 1000
   return {
     userAddress,
-    ts,
+    ts: ts.toString(),
     email,
     tiwtter,
     discord,

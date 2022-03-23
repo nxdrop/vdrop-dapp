@@ -445,7 +445,6 @@ export default {
           this.customStepVal = this.customStepVal + 1
         }
       }
-      console.log('>>>>>>>>>>>>>>>>>>>', this.whiteStepVal, this.customStepVal)
     },
 
     prevStepHandler(typ) {
@@ -462,7 +461,6 @@ export default {
           this.customStepVal = 1
         }
       }
-      console.log('>>>>>>>>>>>>>>>>>>>', this.whiteStepVal, this.customStepVal)
     },
 
     addTraitState() {

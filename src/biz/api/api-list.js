@@ -79,8 +79,12 @@ const user = {
     url: '/user/mailLogin',
     method: 'post',
   },
+  getAddress: {
+    url: '/airdrops/getAddress',
+    method: 'get',
+  },
   registWithMail: {
-    url: '/user/registerNext',
+    url: '/airdrops/signUserMail',
     method: 'post',
   },
   uploadFile: {
@@ -96,6 +100,10 @@ const drop = {
   },
   list: {
     url: '/airdrops/listDrop',
+    method: 'get',
+  },
+  getClaimParams: {
+    url: '/airdrops/getClaimProof',
     method: 'get',
   },
 }

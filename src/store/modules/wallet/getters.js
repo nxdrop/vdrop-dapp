@@ -8,3 +8,9 @@ export const shortAddress = (state) => {
 export const walletConnected = (state) => {
   return !!state.selectedAddress
 }
+
+export const hasUserRegist = (state) => {
+  const { address, email, tiwtter, discord } = state.userInfo
+
+  return address && (email || tiwtter || discord)
+}

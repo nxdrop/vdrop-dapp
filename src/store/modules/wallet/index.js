@@ -8,9 +8,16 @@ export default {
     chainId: 0x0,
     currentWalletType: null,
     selectedAddress: '',
+    userInfo: {
+      address: '',
+      email: '',
+      discord: '',
+      tiwtter: '',
+    },
   },
   mutations,
   getters: {
+    currentAddress: (state) => state.selectedAddress || '',
     ...getters,
   },
   actions,

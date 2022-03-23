@@ -1,0 +1,135 @@
+<template>
+  <v-container>
+    <v-card class="meta-nftcard" elevation="0" outlined>
+      <v-card-title>
+        <span v-if="d.logoUri" key="drop_logo">
+          <v-avatar><v-img :src="d.logoUri"></v-img> </v-avatar>
+        </span>
+        <span class="title pl-2"> {{ d.name }} {{ chainId }} </span>
+      </v-card-title>
+      <v-list-item three-line>
+        <v-list-item-content>
+          <div class="text-over-line">
+            <span>{{ d.nftInfo ? d.nftInfo.name : '' }}</span> <span class="drop-total">[{{ d.dropTotal }}]</span>
+          </div>
+          <v-list-item-title> </v-list-item-title>
+          <v-list-item-subtitle>
+            {{ d.nftInfo ? d.nftInfo.description : '' }}
+          </v-list-item-subtitle>
+        </v-list-item-content>
+        <v-list-item-avatar v-if="d.nftInfo && d.nftInfo.image" key="'img_' + id" size="120" tile color="grey">
+          <v-img :src="d.nftInfo.image"></v-img>
+        </v-list-item-avatar>
+        <v-list-item-avatar v-else key="'_spanImg_' + id" size="80" tile color="grey">
+          {{
+            d.nftInfo && d.nftInfo.name ? (d.nftInfo.name.length > 3 ? d.nftInfo.name.slice(0, 3) : d.nftInfo.name) : ''
+          }}
+        </v-list-item-avatar>
+      </v-list-item>
+      <v-card-actions>
+        <v-btn rounded outlined small text class="px-6" @click="claimHandler">Claim</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-container>
+</template>
+
+<script>
+import { getAllowWeb3js } from '@lib/web3'
+import { claimNFT } from '@biz/abi/drop-nft-sdk'
+import { mapGetters, mapState } from 'vuex'
+export default {
+  name: 'DropDetail',
+  components: {},
+  data: () => ({
+    id: '',
+    claimParam: {},
+  }),
+  computed: {
+    ...mapState('wal', ['chainId']),
+    ...mapGetters('biz', ['dropItems']),
+    ...mapGetters('wal', ['currentAddress']),
+    d() {
+      const dropid = this.id
+      const detail = (this.dropItems || []).find((it) => it.dropid === dropid || it.dropid === parseInt(dropid))
+      return detail || {}
+    },
+    canClaim() {
+      return this.claimParam && this.claimParam.address
+    },
+  },
+  mounted() {
+    const dropid = this.$route.params.id
+    const address = this.$store.state.wal.selectedAddress
+
+    this.id = dropid
+
+    if (address && dropid) {
+      this.$api('drop.getClaimParams', { dropId: dropid, address })
+        .then((resp) => {
+          const { code, msg, data } = resp
+          if (code === 0 && typeof data === 'object') {
+            this.claimParam = data
+          } else {
+            throw new Error(msg || 'not get drop token')
+          }
+        })
+        .catch((ex) => {
+          console.log(ex)
+        })
+    }
+  },
+  methods: {
+    async claimHandler() {
+      const vm = this
+      try {
+        const dropId = this.id
+        const { chainId, selectedAddress } = this.$store.state.wal || {}
+        if (!chainId || !selectedAddress) throw new Error('Please connect wallet')
+
+        if (!dropId) throw new Error('Miss dropid or address')
+
+        const claimResp = await this.$api('drop.getClaimParams', { dropId, address: selectedAddress })
+
+        const { code, msg, data } = claimResp
+
+        if (code !== 0 || typeof data !== 'object' || !data) {
+          throw new Error(msg === 'ok' ? 'Not found your address in this drop' : msg)
+        }
+        const web3js = getAllowWeb3js()
+
+        const receipt = await claimNFT(web3js, {
+          selectedAddress: selectedAddress,
+          dropid: data.dropId,
+          tokenId: data.tokenId,
+          proof: data.proof,
+          chainId,
+        })
+        console.log('>>>>>>>>>>>>>>>>>>>', receipt)
+      } catch (ex) {
+        const { message } = ex
+        console.log('>>>>>>>>ex.dat>>>>>>>>>>>', typeof message)
+        let msg = ex.message
+        console.log('ex', ex.message)
+
+        try {
+          let _emsg = ex.message
+          console.log('>>>>>>>>>>>>>>>>_emsg>>>>>>>>', typeof ex.message)
+          let regex = 'Internal JSON-RPC error.'
+
+          if (_emsg.startsWith(regex)) {
+            let jsonStr = _emsg.slice('')
+            console.log('>>>>>>>>>>>>>>>>_emsg>>>>>>>>', _emsg)
+          }
+
+          const errData = JSON.parse(ex.message)
+          msg = errData.message || ex.message
+          console.log('>>>>>>>>>>>>>>>>>>>>>>>>', errData)
+        } catch (_) {}
+
+        vm.$toast(msg, 'fail', 10000)
+      }
+    },
+  },
+}
+</script>
+<style lang="scss" scoped></style>

@@ -50,11 +50,23 @@ export const getNFTBalance = async (web3js, address) => {}
 export const claimNFT = async (web3js, params = {}) => {
   const { dropid, tokenId, proof, chainId, selectedAddress } = params
 
-  if (typeof dropid !== 'number' || !proof || !proof.length) throw new Error('miss dropid or proof')
+  if (!dropid) throw new Error('miss dropid')
+
+  if (!proof || !proof.length) throw new Error('miss dropid or proof')
 
   const inst = await DropNFTInstance(web3js, chainId)
 
-  const receipt = await inst.methods.claim(dropid, tokenId, proof).send({ from: selectedAddress })
+  let id = typeof dropid !== 'number' ? parseInt(dropid) : dropid
+
+  let ownerAddress
+
+  ownerAddress = await inst.methods.ownerOf(id).call()
+
+  if (ownerAddress && ownerAddress.toLowerCase() === selectedAddress.toLowerCase()) {
+    throw new Error(`NFT Token [${dropid}] has claimed`)
+  }
+
+  const receipt = await inst.methods.claim(id, tokenId, proof).send({ from: selectedAddress })
 
   // todo toggler
 
