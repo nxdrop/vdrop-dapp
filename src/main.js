@@ -15,7 +15,7 @@ Vue.use(Toast)
 Vue.config.productionTip = false
 Vue.prototype.$api = api
 
-store.dispatch('web3/checkMetaMask')
+initStore(store)
 
 const dapp = new Vue({
   router,
@@ -23,6 +23,11 @@ const dapp = new Vue({
   vuetify,
   render: (h) => h(App),
 }).$mount('#app')
+
+function initStore(store) {
+  store.dispatch('web3/checkMetaMask')
+  store.dispatch('biz/loadDropList')
+}
 
 if (process.env.NODE_ENV === 'development') {
   global.nxdrop = dapp

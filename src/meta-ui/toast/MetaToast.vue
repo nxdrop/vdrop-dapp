@@ -153,6 +153,10 @@ export default {
     &__content {
       padding-left: 0.25em;
       font-size: 0.85rem;
+
+      span {
+        word-break: break-all;
+      }
     }
   }
 }

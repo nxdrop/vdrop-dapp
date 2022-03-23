@@ -55,18 +55,41 @@
             </span>
           </div>
 
-          <v-card class="muser-regist__card" elevation="0" outlined rounded>
+          <v-card
+            v-if="!hasUserRegist"
+            key="address_unregist"
+            class="muser-regist__card"
+            elevation="0"
+            outlined
+            rounded
+          >
             <div class="form-tip">
               <span class="tip-text"> {{ registText }}</span>
             </div>
             <div class="muser-regist__form">
               <v-text-field dense label="Email" :value="inputEmail" @change="(v) => (inputEmail = v)"></v-text-field>
-              <!-- <v-text-field dense label="Tiwtter" :value="inputTiwtter"></v-text-field>
-              <v-text-field dense label="Discord" :value="inputDiscord"></v-text-field> -->
+              <v-text-field v-model="inputTiwtter" dense label="Tiwtter"></v-text-field>
+              <v-text-field v-model="inputDiscord" dense label="Discord"></v-text-field>
             </div>
 
             <div class="muser-regist__action">
               <v-btn small outlined color="#8f00ff" plain @click="registEmailHandler">Sign & Regist</v-btn>
+            </div>
+          </v-card>
+          <v-card v-if="hasUserRegist" class="muser-regist__card" elevation="0" outlined rounded>
+            <div class="form-tip">
+              <span class="tip-text"> {{ registText }}</span>
+            </div>
+            <div class="muser-info">
+              <div class="d-inline">
+                <span class="label">Email :</span><span class="text">{{ userInfo.email || '' }}</span>
+              </div>
+              <div class="d-inline">
+                <span class="label">Tiwtter :</span><span class="text">{{ userInfo.tiwtter || '' }}</span>
+              </div>
+              <div class="d-inline">
+                <span class="label">Discord :</span><span class="text">{{ userInfo.discord || '' }}</span>
+              </div>
             </div>
           </v-card>
         </div>
@@ -120,10 +143,11 @@ export default {
   },
   computed: {
     ...mapGetters('web3', ['metamaskInjected', 'envChecking']),
-    ...mapGetters('wal', ['walletConnected', 'shortAddress']),
+    ...mapGetters('wal', ['walletConnected', 'shortAddress', 'hasUserRegist']),
     ...mapGetters(['getConnectBtn']),
-    ...mapState('wal', ['selectedAddress']),
+    ...mapState('wal', ['selectedAddress', 'userInfo']),
   },
+  watch: {},
   mounted() {},
   methods: {
     async unConnectHandler() {
@@ -135,10 +159,11 @@ export default {
         const vm = this
         connectMetamask()
           .then((resp) => {
-            console.log('>>>>>>>>>>>connectMetamask>>>>>>>', resp)
             vm.$store.dispatch('wal/setWalletState', resp)
 
             vm.$store.dispatch('sol/updateDropNftBaseInfo', resp.chainId)
+
+            vm.$store.dispatch('wal/loadUserInfo', resp.selectedAddress)
             // this.metamaskBtnText = resp.selectedAddress
             // if (SIGNUP_ROUTES.find((v) => v === vm.$route.path)) {
             //   vm.$store.dispatch('wal/setWalletState', resp)
@@ -164,9 +189,11 @@ export default {
       })
     },
     myNftHandler() {
-      this.$router.push('/nfts/mine', () => {
-        this.opened = false
-      })
+      this.$toast('Come soon...', 'info', 3000)
+      return
+      // this.$router.push('/nfts/mine', () => {
+      //   this.opened = false
+      // })
     },
     async registEmailHandler() {
       if (!this.inputEmail) {
@@ -181,11 +208,17 @@ export default {
           tiwtter: this.inputTiwtter || '',
           discord: this.inputDiscord || '',
         }
-        console.log('Regist>>>opts>>>>>>>>>>>>>>', opts)
+
         const web3js = await getWeb3js()
-        const resp = await signByPersonal(web3js, opts)
-        console.log('Regist>>>>>>>>>ex>>>>>>>>', resp)
-        this.$toast('Signed Success,but no call back api.', 'success')
+        const postParams = await signByPersonal(web3js, opts)
+        console.log('Regist>>>>>>>>>ex>>>>>>>>', postParams)
+        const apiRet = await this.$api('user.registWithMail', postParams)
+        const { code, msg, data } = apiRet
+        console.log('Regist>>>opts>>>>>>>>>>>>>>', postParams, apiRet)
+        if (code !== 0 || !data || !data.length) throw new Error(msg || 'regist fail')
+        this.$store.dispatch('wal/updateUserInfo', data[0])
+
+        this.$toast('Signed Success', 'success')
       } catch (ex) {
         console.log('Regist>>>>>>>>>ex>>>>>>>>', ex)
         this.$toast(`Signed fail.${ex.message}`, 'fail', 8000)
@@ -277,6 +310,29 @@ export default {
         &.btn-nfts {
           border: 1px solid #eaeaea;
           color: #333;
+        }
+      }
+
+      div.muser-info {
+        width: 100%;
+        display: flex;
+        flex-flow: column nowrap;
+
+        & > div {
+          padding: 0 6px;
+          & > span {
+            font-size: 0.75rem;
+            line-height: 1.05rem;
+          }
+        }
+
+        span.label {
+          font-weight: 300;
+          color: rgba(0, 0, 0, 0.58);
+        }
+
+        span.text {
+          color: rgba(0, 0, 0, 0.88);
         }
       }
     }

@@ -38,6 +38,11 @@ const routes = [
     ],
   },
   {
+    path: '/drop_detail/:id',
+    name: 'dropDetail',
+    component: () => import(/*webpackChunkName: "player" */ '@pages/drop/DropDetail.vue'),
+  },
+  {
     path: '/nfts',
     name: 'nfts',
     component: () => import(/*webpackChunkName: "signup" */ '@pages/nft/MyNfts.vue'),
@@ -50,6 +55,17 @@ const routes = [
     ],
   },
 ]
+
+;['push', 'replace'].forEach((method) => {
+  const originalMethod = VueRouter.prototype[method]
+  VueRouter.prototype[method] = function m(location) {
+    return originalMethod.call(this, location).catch((error) => {
+      if (error.name !== 'NavigationDuplicated') {
+        // capture exception
+      }
+    })
+  }
+})
 
 const router = new VueRouter({
   routes,
