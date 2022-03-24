@@ -3,9 +3,9 @@
     <v-card class="meta-nftcard" elevation="0" outlined>
       <v-card-title>
         <span v-if="d.logoUri" key="drop_logo">
-          <v-avatar><v-img :src="d.logoUri"></v-img> </v-avatar>
+          <v-avatar><v-img :src="d.logoUri"></v-img></v-avatar>
         </span>
-        <span class="title pl-2"> {{ d.name }} {{ chainId }} </span>
+        <span class="title pl-2">{{ d.name }}</span>
       </v-card-title>
       <v-list-item three-line>
         <v-list-item-content>
