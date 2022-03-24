@@ -20,6 +20,7 @@ export const loadDropList = async ({ commit }) => {
     // console.log(drops, data)
     commit(types.UPD_DROP_LIST, drops)
   } else {
+    if (data && !data.length) throw new Error('No airdrops.')
     throw new Error(msg || 'no drops')
   }
 }
