@@ -30,8 +30,6 @@ service.interceptors.request.use(
       config.headers[HEADER_TOKEN_KEY] = `${window.localStorage.getItem('Authorization') || ''}`
     }
 
-    console.log('>>>>data>>>config>>>>>>>', API_BASE_URI)
-
     return config
   },
   (err) => Promise.reject(err)

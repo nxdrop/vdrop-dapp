@@ -3,7 +3,7 @@
     <v-row>
       <v-col class="meta-cards-wrap" cols="12" md="10" sm="12">
         <v-row>
-          <v-col v-for="(item, idx) in dropItems" :key="idx" class="m-col">
+          <v-col v-for="(item, idx) in dropItems" :key="idx" cols="12" class="m-col">
             <v-card class="meta-drop-card" elevation="0" outlined>
               <v-list-item three-line>
                 <v-list-item-content>
@@ -96,6 +96,18 @@ export default {
   .token-wrap {
     span {
       font-size: 0.85rem;
+    }
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .m-col {
+    flex: 0 0 100%;
+    div.meta-drop-card {
+      height: 175px;
+      display: flex;
+      flex-flow: column nowrap;
+      justify-content: space-between;
     }
   }
 }

@@ -17,12 +17,13 @@ export const updateUserInfo = ({ commit }, userInfo = {}) => {
 
 export const loadUserInfo = ({ commit, state }, selectedAddress) => {
   if (selectedAddress || state.selectedAddress) {
+    console.log('selectedAddress>>>', selectedAddress)
     const addr = selectedAddress || state.selectedAddress
 
     api('user.getAddress', { address: addr })
       .then((resp) => {
         const { code, msg, data } = resp
-
+        console.log('Get regist>>>>', msg, data)
         if (code === 0 && data && data.length) {
           commit(types.UPD_USER_INFO, data[0])
         } else {

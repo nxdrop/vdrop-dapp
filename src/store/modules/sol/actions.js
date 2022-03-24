@@ -12,6 +12,6 @@ export const updateDropNftBaseInfo = async ({ commit }, chainId) => {
       commit(types.UPD_NFT_DROP_LENGTH, dropLength)
     })
     .catch((ex) => {
-      console.log('laod drop base fail.')
+      console.log('laod drop base fail.', ex)
     })
 }

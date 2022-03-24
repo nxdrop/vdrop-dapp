@@ -2,7 +2,7 @@ import qs from 'qs'
 import request from './http-request'
 import allApiList from './api-list'
 
-const getApis = ['user.getAddress', 'drop.getClaimParams']
+const getApis = { 'user.getAddress': true, 'drop.getClaimParams': true }
 
 /**
  *
@@ -36,7 +36,7 @@ export default function api(apikey, data = {}) {
         req.data = qs.stringify(data)
         break
       case 'get':
-        if (getApis.findIndex((d) => d === apikey)) {
+        if (getApis[apikey] && data) {
           req.url = url.indexOf('?') > 0 ? `${req.url}&${qs.stringify(data)}` : `${req.url}?${qs.stringify(data)}`
         }
 

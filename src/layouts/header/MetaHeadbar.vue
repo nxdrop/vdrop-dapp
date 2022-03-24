@@ -30,9 +30,7 @@
 <script>
 import MetaLogo from '@comp/MetaLogo.vue'
 import MetaNavMenus from '@/layouts/header/NavMenus.vue'
-import MetamaskDropdown from '@comp/MetamaskDropdown.vue'
 import NotificationBell from '@comp/NotificationBell.vue'
-import AccountDropdown from '@comp/AccountDropdown.vue'
 import MetaTopMenu from '@/meta-ui/wallet/MetaUserMenu.vue'
 
 import { mapState, mapGetters } from 'vuex'

@@ -162,7 +162,7 @@ export default {
             vm.$store.dispatch('wal/setWalletState', resp)
 
             vm.$store.dispatch('sol/updateDropNftBaseInfo', resp.chainId)
-
+            console.log('>>>>>>>>>>>>>>>>>>>>', resp)
             vm.$store.dispatch('wal/loadUserInfo', resp.selectedAddress)
             // this.metamaskBtnText = resp.selectedAddress
             // if (SIGNUP_ROUTES.find((v) => v === vm.$route.path)) {

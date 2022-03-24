@@ -10,7 +10,7 @@ import * as types from './mutation-types'
 export const checkMetaMask = async ({ commit }) => {
   try {
     commit(types.SET_CHECKING_STATE, false)
-    const provider = await detectEthereumProvider({ silent: true })
+    const provider = await detectEthereumProvider({ silent: true, timeout: 2000 })
 
     if (provider && provider.isMetaMask) {
       // commit(types.SET_ETHEREUM_PROVIDER, provider)
@@ -18,8 +18,8 @@ export const checkMetaMask = async ({ commit }) => {
     }
     commit(types.SET_CHECKING_STATE, true)
   } catch (ex) {
-    commit(types.SET_CHECKING_STATE, true)
     console.log('>>>>>>>>>>>checkMetaMask>>>>>>>>>>>>', ex)
+    commit(types.SET_CHECKING_STATE, true)
   } finally {
     commit(types.SET_CHECKING_STATE, true)
   }

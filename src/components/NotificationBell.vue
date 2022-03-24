@@ -25,14 +25,17 @@
     <v-sheet class="mx-2" width="260">
       <div class="meta-inner-close">
         <div class="meta-notifi-head">
-          <span class="text">最新通知</span>
+          <span class="text">Latest notification</span>
         </div>
         <v-icon @click="closeWalletModal">mdi-close</v-icon>
       </div>
       <v-list class="meta-notifi-list" two-line>
         <v-list-item v-for="(it, idx) in unreadMessages" :key="idx" dense>
           <v-list-item-content>
-            <v-list-item-title>{{ it.title }}</v-list-item-title>
+            <v-list-item-title>
+              <v-icon>mdi-water-outline</v-icon>
+              <span>{{ it.title }}</span>
+            </v-list-item-title>
             <v-list-item-subtitle>{{ it.message }}</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
@@ -58,10 +61,7 @@ export default {
       opened: false,
       bellSize: 28,
       bellSvg,
-      unreadMessages: [
-        { message: 'hi, this is test notification', title: 'Test Nx Drop' },
-        { message: 'hi,Drop drop drop!', title: 'NFT drop 2022' },
-      ],
+      unreadMessages: [{ message: 'More functions,will come soon', title: 'Metadrop' }],
     }
   },
   computed: {
