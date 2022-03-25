@@ -21,6 +21,7 @@
               <p class="meta-credentail-desc">
                 {{ card.desc }}
               </p>
+              <p class="meta-credentail-desc pt-2">{{ card.chainInfo }}</p>
             </v-img>
 
             <v-card-actions>
@@ -48,13 +49,13 @@ export default {
   data: () => ({
     cards: [
       {
-        title: 'Whitelist',
+        title: 'Airdrop address library',
         avatarImg: dropSvg,
         icon: 'mdi-water-outline',
-        desc: 'MetaDrop registed Addresses Valueful',
+        desc: 'High-value AirDrop registered user address library',
         createdBy: '0x9d6...F36',
         type: 'metadrop',
-        chainInfo: 'Polygon',
+        chainInfo: 'Ethereum & MATIC & Binance ed.',
       },
       {
         title: 'Uniswap V2 Liquidity Provider ',
