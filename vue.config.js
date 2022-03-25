@@ -4,22 +4,8 @@ const isProd = process.env.NODE_ENV === 'production'
 
 // const { R, src } = require('./ci/paths')
 
-module.exports = {
-  publicPath: process.env.PUBLIC_PATH || '',
-  productionSourceMap: isProd,
-  transpileDependencies: ['vuetify'],
-  devServer: {
-    port: process.env.PORT || 37211,
-    disableHostCheck: false,
-    proxy: {
-      // '/meta': {
-      //   changeOrigin: true,
-      //   ws: true,
-      //   target: 'http://192.168.94.186:3000',
-      //   pathRewrite: {
-      //     '^/meta': '/',
-      //   },
-      // },
+const apiProxy = isProd
+  ? {
       '/meta': {
         changeOrigin: true,
         ws: true,
@@ -28,6 +14,28 @@ module.exports = {
           '^/meta': '',
         },
       },
+    }
+  : {
+      '/meta': {
+        changeOrigin: true,
+        ws: true,
+        target: 'http://testdrop.ayibyb.com.cn/',
+        pathRewrite: {
+          '^/meta': '',
+        },
+      },
+    }
+
+module.exports = {
+  publicPath: process.env.PUBLIC_PATH || '',
+  productionSourceMap: isProd,
+  transpileDependencies: ['vuetify'],
+  devServer: {
+    port: process.env.PORT || 37211,
+    disableHostCheck: false,
+    proxy: {
+      ...apiProxy,
+
       // '/airdrops/getAddress': {
       //   changeOrigin: true,
       //   ws: true,

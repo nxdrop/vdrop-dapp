@@ -4,7 +4,7 @@ import MetaToast from './MetaToast.vue'
 
 const ToastConstructor = vue.extend(MetaToast)
 
-function showToast(message, type = 'normal', duration = 5000) {
+function showToast(message, type = 'normal', duration = 5000, cb) {
   const _toast = new ToastConstructor({
     data() {
       return {
@@ -21,6 +21,9 @@ function showToast(message, type = 'normal', duration = 5000) {
 
   setTimeout(() => {
     _toast.showToast = false
+    if (typeof cb === 'function') {
+      cb()
+    }
   }, duration)
 }
 

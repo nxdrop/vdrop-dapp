@@ -130,3 +130,21 @@ export const POLYGON_MUMBAI = {
   rpcUrls: ['https://rpc-mumbai.maticvigil.com/'],
   blockExplorerUrls: ['https://mumbai.polygonscan.com/'],
 }
+
+export const NETWORK_CNSTS = {
+  [BSC_MAINNET_CHAIN_ID]: {
+    event: {
+      blockLimit: 5000,
+    },
+  },
+  [BSC_TESTNET_CHAIN_ID]: {
+    event: {
+      blockLimit: 5000,
+    },
+  },
+  [POLYGON_MAINNET_ID]: {
+    event: {
+      blockLimit: 10000,
+    },
+  },
+}

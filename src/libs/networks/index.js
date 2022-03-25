@@ -35,7 +35,7 @@ export const allChains = {
 }
 
 // export con
-export const supportChainKeys = [MATIC_MAINNET]
+export const supportChainKeys = [MATIC_MAINNET, MUMBAI_TESTNET]
 
 /**
  *

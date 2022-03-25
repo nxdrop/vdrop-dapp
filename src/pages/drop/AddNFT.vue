@@ -250,8 +250,8 @@
                   color="orange"
                   block
                   text
-                  :outlined="!selectedAddress"
-                  :disabled="!selectedAddress"
+                  :outlined="!selectedAddress || loading"
+                  :disabled="!selectedAddress || loading"
                   @click="submitDropHandler"
                   >Submit</v-btn
                 ></v-col
@@ -312,6 +312,7 @@ export default {
         },
       ],
       traits: [{ trait_type: '', value: 10, display_type: '' }],
+      loading: false,
     }
   },
   computed: {
@@ -410,26 +411,33 @@ export default {
       }
     },
     setUploadResult(merkleRoot, amout) {
-      console.log('>>>>>>>>', merkleRoot, amout)
       this.merkleRoot = merkleRoot
       this.dropAmount = amout
     },
     // Submit
     async submitDropHandler() {
       try {
+        this.loading = true
         const submitData = validFormData(this)
-        console.log('>>resp>>>>>>>>>>', submitData)
+
+        const scb = this.gobackHome.bind(this)
+
         const resp = await this.$api('drop.create_nft', submitData)
         console.log('>>resp>>>>>>>>>>', resp)
         const { code, msg, data } = resp
         if (code !== 0) {
           throw new Error(msg || 'Create Drop Fial')
         } else {
-          this.$toast('Create Drop Success', 'success')
+          this.$toast('Create Drop Success', 'success', scb)
         }
       } catch (ex) {
+        this.loading = false
         this.$toast(ex.message, 'fail', 6000)
       }
+    },
+    gobackHome() {
+      this.loading = false
+      this.$router.push('/')
     },
     nextStepHandler(typ) {
       if (typ === 1) {
