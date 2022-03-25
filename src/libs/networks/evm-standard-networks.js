@@ -148,3 +148,9 @@ export const NETWORK_CNSTS = {
     },
   },
 }
+
+export function getBlockNumberLimit(chainId) {
+  let { event } = NETWORK_CNSTS[chainId] || {}
+  if (!event) return 5000
+  return event.blockLimit || 5000
+}

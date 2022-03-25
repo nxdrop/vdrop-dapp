@@ -15,13 +15,13 @@ import { SC_DROP_NFT_KEY } from './sc-addresses'
 
 export const MATIC_SC_EXTERNALS = {
   [SC_DROP_NFT_KEY]: {
-    deployBlockNumber: 0,
+    deployBlockNumber: 26296010,
   },
 }
 
 export const MUNBAI_SC_EXTERNALS = {
   [SC_DROP_NFT_KEY]: {
-    deployBlockNumber: 0,
+    deployBlockNumber: 25655676,
   },
 }
 

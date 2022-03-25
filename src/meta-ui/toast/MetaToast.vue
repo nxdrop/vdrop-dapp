@@ -44,6 +44,7 @@ export default {
     type: 'normal',
     message: '',
     duration: 5000,
+    cb: () => {},
   }),
   computed: {
     iconSrc() {
@@ -62,11 +63,20 @@ export default {
       }
     },
   },
+  beforeUnmount() {
+    if (typeof this.cb === 'function') {
+      console.log('Call back .......')
+      this.cb()
+    }
+  },
   methods: {
     closeToaster() {
       const self = document.querySelector('#__meta_toaster__')
       if (self) {
+        typeof this.cb === 'function' && this.cb()
         self.remove()
+      } else {
+        typeof this.cb === 'function' && this.cb()
       }
     },
   },

@@ -13,6 +13,8 @@
 import { POLYGON_MUMBAI_ID as defChainId } from '@lib/networks/evm-standard-networks'
 import { getDropNFTABI } from './json'
 import { getContractAddress, SC_DROP_NFT_KEY } from './sc-addresses'
+import { getDropNFTStartBlockNumber } from './sc-externals'
+import { getBlockNumberLimit } from '@lib/networks/evm-standard-networks'
 
 /**
  *
@@ -71,4 +73,55 @@ export const claimNFT = async (web3js, params = {}) => {
   // todo toggler
 
   return receipt
+}
+
+export const loadMyNft = async (web3js, chainId, selectedAddress) => {
+  const inst = DropNFTInstance(web3js, chainId)
+  const fromBlockNumber = getDropNFTStartBlockNumber(chainId)
+  const pageSzie = getBlockNumberLimit(chainId)
+
+  const endBlockNumber = await web3js.eth.getBlockNumber()
+
+  let options = {
+    filter: { to: [selectedAddress] },
+    fromBlock: fromBlockNumber,
+    toBlock: 'latest',
+  }
+
+  const chunks = []
+  const totalBlocks = endBlockNumber - fromBlockNumber
+
+  if (pageSzie > 0 && totalBlocks > pageSzie) {
+    const size = Math.ceil(totalBlocks / pageSzie)
+
+    let startBlockNumber = fromBlockNumber
+
+    for (let i = 0; i < size; i++) {
+      const formRageBlock = startBlockNumber
+      const toRangeBlock = i === size - 1 ? endBlockNumber : startBlockNumber + pageSzie
+
+      chunks.push({ ...options, fromBlock: formRageBlock, toBlock: toRangeBlock })
+    }
+  } else {
+    chunks.push({ ...options, fromBlock: fromBlockNumber, toBlock: 'latest' })
+  }
+
+  const events = []
+  const errors = []
+  for (let j = 0; j < chunks.length; j++) {
+    await inst
+      .getPastEvents('Transfer', chunks[j], function (err, transferEvts) {
+        if (err) {
+          errors.push(err)
+        }
+        if (transferEvts.length > 0) {
+          events.push(...transferEvts)
+        }
+      })
+      .then((evts) => console.log)
+  }
+
+  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>', events)
+
+  return { lastBlock: endBlockNumber, events, errors }
 }

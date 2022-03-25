@@ -30,6 +30,6 @@ function initStore(store) {
 }
 
 if (process.env.NODE_ENV === 'development') {
-  global.nxdrop = dapp
+  global.$dapp = dapp
   window.DropNFTInstance = DropNFTInstance
 }

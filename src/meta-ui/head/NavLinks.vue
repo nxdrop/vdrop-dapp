@@ -7,6 +7,12 @@
       <li>
         <a href="#" class="nav-link" @click="navLinkHandler('/drop/nft')"><span>Create Drop</span></a>
       </li>
+      <li>
+        <a href="#" class="nav-link" @click="navLinkHandler('/rule/credentails')"><span>Credentails</span></a>
+      </li>
+      <li>
+        <a href="#" class="nav-link" @click="navLinkHandler('/u/nft/list')"><span>My NFTs</span></a>
+      </li>
       <!-- <li>
         <a href="#" class="nav-link"><span>NFT</span></a>
       </li> -->
@@ -51,11 +57,16 @@ nav.meta {
     }
 
     a.nav-link {
+      transition-property: box-shadow, transform, opacity;
+      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
       text-decoration: none;
-
+      :hover {
+        color: #333333;
+        font-size: 1.05rem;
+      }
       color: #5c5c5c;
       & > span {
-        padding: 0 8px;
+        padding: 0 16px;
       }
     }
   }

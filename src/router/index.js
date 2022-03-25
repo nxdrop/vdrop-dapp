@@ -54,6 +54,21 @@ const routes = [
       },
     ],
   },
+  {
+    path: '/u/nft/list',
+    name: 'uNftList',
+    component: () => import(/*webpackChunkName: "u-nft-list" */ '@pages/profile/nft/list.vue'),
+  },
+  {
+    path: '/u/nft/detail/:id',
+    name: 'uNftList',
+    component: () => import(/*webpackChunkName: "u-nft-list" */ '@pages/profile/nft/list.vue'),
+  },
+  {
+    path: '/rule/credentails',
+    name: 'credentails',
+    component: () => import(/*webpackChunkName: "u-nft-list" */ '@pages/rule/credentails/list.vue'),
+  },
 ]
 
 ;['push', 'replace'].forEach((method) => {

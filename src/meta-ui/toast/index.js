@@ -5,6 +5,7 @@ import MetaToast from './MetaToast.vue'
 const ToastConstructor = vue.extend(MetaToast)
 
 function showToast(message, type = 'normal', duration = 5000, cb) {
+  function _cb() {}
   const _toast = new ToastConstructor({
     data() {
       return {
@@ -12,6 +13,7 @@ function showToast(message, type = 'normal', duration = 5000, cb) {
         type: type,
         message: message,
         duration: duration,
+        cb: typeof cb === 'function' ? cb : _cb,
       }
     },
   })
@@ -20,10 +22,8 @@ function showToast(message, type = 'normal', duration = 5000, cb) {
   document.body.appendChild($vm)
 
   setTimeout(() => {
+    typeof cb === 'function' && cb()
     _toast.showToast = false
-    if (typeof cb === 'function') {
-      cb()
-    }
   }, duration)
 }
 

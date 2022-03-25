@@ -423,12 +423,11 @@ export default {
         const scb = this.gobackHome.bind(this)
 
         const resp = await this.$api('drop.create_nft', submitData)
-        console.log('>>resp>>>>>>>>>>', resp)
         const { code, msg, data } = resp
         if (code !== 0) {
           throw new Error(msg || 'Create Drop Fial')
         } else {
-          this.$toast('Create Drop Success', 'success', scb)
+          this.$toast('Create Drop Success', 'success', 3000, scb)
         }
       } catch (ex) {
         this.loading = false
