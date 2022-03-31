@@ -9,8 +9,8 @@
           <v-card-title class="meta-drop-card-title">
             <div class="meta-toggle-wrap">
               <v-btn-toggle :value="filterType" mandatory>
-                <v-btn>whitelist drop</v-btn>
-                <!-- <v-btn @click="setDropFilterTypeHandler(2)">自定义筛选条件</v-btn> -->
+                <v-btn @click="setDropFilterTypeHandler(1)">whitelist drop</v-btn>
+                <v-btn @click="setDropFilterTypeHandler(2)">Credentails</v-btn>
               </v-btn-toggle>
             </div>
             <WhiteListSteper ref="whiteListStepComp" />
@@ -52,7 +52,6 @@
 
             <v-divider></v-divider>
             <!-- Swtich NFT Contract -->
-
             <v-row v-if="filterType === 1" key="uploadAddressInputRow" align="center" class="d-flex mt-2">
               <v-col cols="12" md="8" sm="12">
                 <v-file-input
@@ -88,15 +87,15 @@
             </v-row>
             <v-col v-if="filterType !== 1" key="useMetaRuleCol" class="meta-rule-wrap" cols="12" md="8" sm="12">
               <v-select
-                :value="select"
-                :items="filterRules"
+                v-model="select"
+                :items="credentialsSelect"
                 single-line
                 label="Select address filter rule"
                 return-object
                 outlined
               ></v-select>
               <div class="meta-rule-btn px-2">
-                <v-btn text color="orange">add custom rule</v-btn>
+                <v-btn text color="orange" @click="addCustomRule(select)">add custom rule</v-btn>
               </div>
             </v-col>
             <v-col cols="12" md="8" sm="12" class="">
@@ -297,20 +296,6 @@ export default {
       },
       select: null,
       nftBaseUrl: '',
-      filterRules: [
-        {
-          hash: '11111',
-          text: 'susiswap',
-        },
-        {
-          hash: '11112',
-          text: 'uniswap',
-        },
-        {
-          hash: '1',
-          text: 'metadrop address collections',
-        },
-      ],
       traits: [{ trait_type: '', value: 10, display_type: '' }],
       loading: false,
     }
@@ -318,6 +303,7 @@ export default {
   computed: {
     ...mapState('wal', ['selectedAddress']),
     ...mapGetters('sol', ['nftBaseUri']),
+    ...mapGetters('biz', ['credentialsSelect', 'skillsSelect']),
     dyncTraits() {
       return this.traits
     },
@@ -335,8 +321,25 @@ export default {
   mounted() {
     const baseUri = getMetaDropNftBaseUri()
     this.nftBaseUrl = this.nftBaseUri || baseUri
+    this.filterType = 1
+    this.getCredentialSelectList()
+    this.getSkillsList()
   },
   methods: {
+    async getCredentialSelectList() {
+      try {
+        await this.$store.dispatch('biz/getDropCredentialsSelectList')
+      } catch (ex) {
+        this.$toast(ex.message, 'fail', 6000)
+      }
+    },
+    async getSkillsList() {
+      try {
+        await this.$store.dispatch('biz/getDropSkillsSelectList')
+      } catch (ex) {
+        this.$toast(ex.message, 'fail', 6000)
+      }
+    },
     getCircleColor(v) {
       if (!v) return ''
       if (v > 0 && v < 30) return 'blue-grey'
@@ -490,6 +493,9 @@ export default {
       console.log('>>>>>>>>>>>>>>>>', v)
       this.opensea = Boolean(v)
     },
+    addCustomRule(selectObj){
+      console.log("============",selectObj)
+    }
   },
 }
 </script>

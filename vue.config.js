@@ -19,7 +19,7 @@ const apiProxy = isProd
       '/meta': {
         changeOrigin: true,
         ws: true,
-        target: 'http://testdrop.ayibyb.com.cn/',
+        target: 'http://127.0.0.1:3000/',
         pathRewrite: {
           '^/meta': '',
         },

@@ -2,7 +2,12 @@ import qs from 'qs'
 import request from './http-request'
 import allApiList from './api-list'
 
-const getApis = { 'user.getAddress': true, 'drop.getClaimParams': true }
+const getApis = {
+  'user.getAddress': true,
+  'drop.getClaimParams': true,
+  'drop.addressList': true,
+  'drop.skillList': true,
+}
 
 /**
  *

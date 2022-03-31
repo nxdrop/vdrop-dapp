@@ -6,6 +6,9 @@ export default {
   namespaced: true,
   state: {
     drops: [],
+    credentials: [],
+    credentialSelect: [],
+    skillSelect: [],
   },
   mutations,
   getters: {

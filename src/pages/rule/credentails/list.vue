@@ -6,35 +6,46 @@
     </v-toolbar>
     <v-container fluid>
       <v-row>
-        <v-col v-for="(card, idx) in cards" :key="idx + '_' + card.title" :cols="cardCols">
-          <v-card outlined class="meta-credentail" elevation="0">
-            <v-card-title class="d-flex">
-              <v-avatar v-if="card.avatarUrl || card.icon" size="24">
-                <v-icon v-if="card.icon">{{ card.icon }}</v-icon>
-                <img v-else :src="card.avatarUrl" alt="avatar" />
-              </v-avatar>
-              <div>
-                <span :class="card.avatarUrl || card.icon ? 'ps-2' : ''">{{ card.title }}</span>
-              </div>
-            </v-card-title>
-            <v-img class="align-start px-4" height="150px">
-              <p class="meta-credentail-desc">
-                {{ card.desc }}
-              </p>
-              <p class="meta-credentail-desc pt-2">{{ card.chainInfo }}</p>
-            </v-img>
+        <v-col v-for="(card, idx) in credentialsItems" :key="idx + '_' + card.title" :cols="cardCols">
+          <v-hover v-slot="{ hover }" open-delay="10">
+            <v-card
+              outlined
+              class="meta-credentail"
+              :elevation="hover ? 20 : 2"
+              :class="{ 'on-hover': hover }"
+              @click="credentialDetailHandler(card.id)"
+            >
+              <v-card-title class="d-flex">
+                <v-avatar v-if="card.avatarUrl || card.icon" size="24">
+                  <v-icon v-if="card.icon">{{ card.icon }}</v-icon>
+                  <img v-else :src="card.avatarUrl" alt="avatar" />
+                </v-avatar>
+                <div>
+                  <span :class="card.avatarUrl || card.icon ? 'ps-2' : ''">{{ card.title }}</span>
+                </div>
+              </v-card-title>
+              <v-img class="align-start px-4" height="150px">
+                <p class="meta-credentail-desc">
+                  {{ card.desc }}
+                </p>
+              </v-img>
+              <v-card-text>
+                <p class="meta-credentail-desc pt-2">{{ card.type }}</p>
+                <p class="meta-credentail-desc pt-2">{{ card.chainInfo }}</p>
+              </v-card-text>
 
-            <v-card-actions>
-              <span>{{ card.createdBy }}</span>
-              <v-spacer></v-spacer>
-              <v-btn v-if="card.githubLink" key="githubBtn" icon @click="openLink(card.githubLink, 'github')">
-                <v-icon>mdi-github</v-icon>
-              </v-btn>
-              <v-btn v-if="card.graphLink" key="subgraph" icon @click="openLink(card.graphLink, 'Thegraph')">
-                <v-icon size="20">mdi-graph-outline</v-icon>
-              </v-btn>
-            </v-card-actions>
-          </v-card>
+              <v-card-actions>
+                <span>{{ card.createdBy }}</span>
+                <v-spacer></v-spacer>
+                <v-btn v-if="card.githubLink" key="githubBtn" icon @click="openLink(card.githubLink, 'github')">
+                  <v-icon>mdi-github</v-icon>
+                </v-btn>
+                <v-btn v-if="card.graphLink" key="subgraph" icon @click="openLink(card.graphLink, 'Thegraph')">
+                  <v-icon size="20">mdi-graph-outline</v-icon>
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-hover>
         </v-col>
       </v-row>
     </v-container>
@@ -42,89 +53,91 @@
 </template>
 
 <script>
-import { dropSvg } from '@assets/drop.svg'
+// import { dropSvg } from '@assets/drop.svg'
+import { mapGetters, mapState } from 'vuex'
+
 export default {
-  name: 'UserNftList',
+  name: 'credentialsList',
   components: {},
   data: () => ({
     cards: [
-      {
-        title: 'Airdrop address library',
-        avatarImg: dropSvg,
-        icon: 'mdi-water-outline',
-        desc: 'High-value AirDrop registered user address library',
-        createdBy: '0x9d6...F36',
-        type: 'metadrop',
-        chainInfo: 'Ethereum & MATIC & Binance ed.',
-      },
-      {
-        title: 'Uniswap V2 Liquidity Provider ',
-        avatarUrl: 'https://s1.ax1x.com/2022/03/25/qNfJyQ.png',
-        desc: 'Any address that provided liquidity to a pool on Uniswap V2 on Ethereum mainnet',
-        createdBy: '0xcFc...fC8',
-        type: 'subgraph',
-        chainInfo: 'Ethereum',
-        graphLink: 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2',
-      },
       // {
-      //   title: 'Uniswap V2 Trader',
+      //   title: 'Airdrop address library',
+      //   avatarUrl: dropSvg,
+      //   icon: 'mdi-water-outline',
+      //   desc: 'High-value AirDrop registered user address library',
+      //   createdBy: '0x9d6...F36',
+      //   type: 'metadrop',
+      //   chainInfo: 'Ethereum & MATIC & Binance ed.',
+      // },
+      // {
+      //   title: 'Uniswap V2 Liquidity Provider ',
       //   avatarUrl: 'https://s1.ax1x.com/2022/03/25/qNfJyQ.png',
-      //   desc: 'Any address that traded on Uniswap V2 on the Ethereum Mainnet',
-      //   createdBy: '0xc...D655',
+      //   desc: 'Any address that provided liquidity to a pool on Uniswap V2 on Ethereum mainnet',
+      //   createdBy: '0xcFc...fC8',
       //   type: 'subgraph',
       //   chainInfo: 'Ethereum',
-      //   githubLink: 'https://github.com/Uniswap/v2-subgraph',
       //   graphLink: 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2',
       // },
-      {
-        title: 'OpenSea Legend Buyer',
-        avatarUrl: 'https://opensea.io/static/images/logos/opensea.svg',
-        desc: 'Addresses successfully bought NFT 10 times on Opensea via Matic Chain are eligible to claim for 3 mystery boxes between 2022/01/05 08:00 - 2022/01/26 08:00 GMT+08:00',
-        createdBy: '0xD88F...9bAc',
-        type: 'subgraph',
-        chainInfo: 'MATIC',
-        githubLink: 'https://github.com/Uniswap/v3-subgraph',
-        graphLink: 'https://api.thegraph.com/subgraphs/name/nftgalaxy/opensea-polygon-jan',
-      },
-      {
-        title: 'OpenSea Epic Buyer',
-        avatarUrl: 'https://s1.ax1x.com/2022/03/25/qNfJyQ.png',
-        desc: 'Addresses successfully boughtt NFT 5 times on Opensea via Matic Chain are eligible to claim for 2 mystery boxes between 2022/01/05 08:00 - 2022/01/26 08:00 GMT+08:00',
-        createdBy: '0xD8...9bAc',
-        type: 'subgraph',
-        chainInfo: 'Ethereum',
-        // githubLink: 'https://github.com/Uniswap/v3-subgraph',
-        graphLink: 'https://api.thegraph.com/subgraphs/name/nftgalaxy/opensea-polygon-jan',
-      },
-      {
-        title: 'DyDx Trader',
-        avatarUrl: 'https://s1.ax1x.com/2022/03/25/qNIc36.png',
-        desc: 'Any address that traded on DyDx on the Binance',
-        createdBy: '0xcFc9...a573',
-        type: 'subgraph',
-        chainInfo: 'Binance',
-        githubLink: 'https://github.com/Uniswap/v3-subgraph',
-        graphLink: 'https://trade.dydx.exchange/',
-      },
+      // // {
+      // //   title: 'Uniswap V2 Trader',
+      // //   avatarUrl: 'https://s1.ax1x.com/2022/03/25/qNfJyQ.png',
+      // //   desc: 'Any address that traded on Uniswap V2 on the Ethereum Mainnet',
+      // //   createdBy: '0xc...D655',
+      // //   type: 'subgraph',
+      // //   chainInfo: 'Ethereum',
+      // //   githubLink: 'https://github.com/Uniswap/v2-subgraph',
+      // //   graphLink: 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2',
+      // // },
       // {
-      //   title: 'Opensea Transaction Maker',
+      //   title: 'OpenSea Legend Buyer',
       //   avatarUrl: 'https://opensea.io/static/images/logos/opensea.svg',
-      //   desc: 'Users who listed and sucessfuly sold at least one NFT or offered and succesfully bought at least one NFT',
-      //   createdBy: '0xcFc9...5655',
+      //   desc: 'Addresses successfully bought NFT 10 times on Opensea via Matic Chain are eligible to claim for 3 mystery boxes between 2022/01/05 08:00 - 2022/01/26 08:00 GMT+08:00',
+      //   createdBy: '0xD88F...9bAc',
       //   type: 'subgraph',
       //   chainInfo: 'MATIC',
-      //   githubLink: 'https://github.com/itsjerryokolo/OpenSea',
-      //   graphLink: 'https://api.thegraph.com/subgraphs/name/itsjerryokolo/opensea',
+      //   githubLink: 'https://github.com/Uniswap/v3-subgraph',
+      //   graphLink: 'https://api.thegraph.com/subgraphs/name/nftgalaxy/opensea-polygon-jan',
       // },
-      {
-        title: 'Learn Web3 skill',
-        avatarUrl: 'https://s1.ax1x.com/2022/03/25/qNoyZQ.png',
-        desc: 'Users who learn web3 skills or write articles on CSDN community',
-        createdBy: '0xcFc9...7355',
-        type: 'subgraph',
-        chainInfo: 'MATIC',
-        githubLink: 'https://gitcode.net/explore',
-      },
+      // {
+      //   title: 'OpenSea Epic Buyer',
+      //   avatarUrl: 'https://s1.ax1x.com/2022/03/25/qNfJyQ.png',
+      //   desc: 'Addresses successfully boughtt NFT 5 times on Opensea via Matic Chain are eligible to claim for 2 mystery boxes between 2022/01/05 08:00 - 2022/01/26 08:00 GMT+08:00',
+      //   createdBy: '0xD8...9bAc',
+      //   type: 'subgraph',
+      //   chainInfo: 'Ethereum',
+      //   // githubLink: 'https://github.com/Uniswap/v3-subgraph',
+      //   graphLink: 'https://api.thegraph.com/subgraphs/name/nftgalaxy/opensea-polygon-jan',
+      // },
+      // {
+      //   title: 'DyDx Trader',
+      //   avatarUrl: 'https://s1.ax1x.com/2022/03/25/qNIc36.png',
+      //   desc: 'Any address that traded on DyDx on the Binance',
+      //   createdBy: '0xcFc9...a573',
+      //   type: 'subgraph',
+      //   chainInfo: 'Binance',
+      //   githubLink: 'https://github.com/Uniswap/v3-subgraph',
+      //   graphLink: 'https://trade.dydx.exchange/',
+      // },
+      // // {
+      // //   title: 'Opensea Transaction Maker',
+      // //   avatarUrl: 'https://opensea.io/static/images/logos/opensea.svg',
+      // //   desc: 'Users who listed and sucessfuly sold at least one NFT or offered and succesfully bought at least one NFT',
+      // //   createdBy: '0xcFc9...5655',
+      // //   type: 'subgraph',
+      // //   chainInfo: 'MATIC',
+      // //   githubLink: 'https://github.com/itsjerryokolo/OpenSea',
+      // //   graphLink: 'https://api.thegraph.com/subgraphs/name/itsjerryokolo/opensea',
+      // // },
+      // {
+      //   title: 'Learn Web3 skill',
+      //   avatarUrl: 'https://s1.ax1x.com/2022/03/25/qNoyZQ.png',
+      //   desc: 'Users who learn web3 skills or write articles on CSDN community',
+      //   createdBy: '0xcFc9...7355',
+      //   type: 'subgraph',
+      //   chainInfo: 'MATIC',
+      //   githubLink: 'https://gitcode.net/explore',
+      // },
     ],
   }),
   computed: {
@@ -144,10 +157,24 @@ export default {
           return cols
       }
     },
+    ...mapGetters('biz', ['credentialsItems']),
+  },
+  mounted() {
+    this.getCredentialList()
   },
   methods: {
     openLink(url, target = '_blank') {
       window.open(url, target)
+    },
+    async getCredentialList() {
+      try {
+        await this.$store.dispatch('biz/loadCredentialsList')
+      } catch (ex) {
+        this.$toast(ex.message, 'fail', 6000)
+      }
+    },
+    credentialDetailHandler(id) {
+      this.$router.push({ path: `/rule/credentails/${id}` })
     },
   },
 }
@@ -163,5 +190,15 @@ export default {
       font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
     }
   }
+}
+.v-card {
+  transition: opacity 0.4s ease-in-out;
+}
+
+.v-card:not(.on-hover) {
+  opacity: 0.9;
+}
+.v-card .on-hover .theme--dark{
+  background-color: rgba(#FFF, 0.8)
 }
 </style>

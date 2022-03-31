@@ -69,6 +69,11 @@ const routes = [
     name: 'credentails',
     component: () => import(/*webpackChunkName: "u-nft-list" */ '@pages/rule/credentails/list.vue'),
   },
+  {
+    path: '/rule/credentails/:id',
+    name: 'credentailsDetail',
+    component: () => import(/*webpackChunkName: "u-nft-list" */ '@pages/rule/credentails/detail.vue'),
+  },
 ]
 
 ;['push', 'replace'].forEach((method) => {

@@ -106,6 +106,14 @@ const drop = {
     url: '/airdrops/getClaimProof',
     method: 'get',
   },
+  addressList: {
+    url: '/airdrops/addressList',
+    method: 'get',
+  },
+  skillList: {
+    url: '/airdrops/skillList',
+    method: 'get',
+  },
 }
 
 const storage = {
@@ -115,10 +123,18 @@ const storage = {
   },
 }
 
+const credentials = {
+  list: {
+    url: '/credentials/list',
+    method: 'get',
+  },
+}
+
 const allApis = {
   user,
   drop,
   storage,
+  credentials,
 }
 
 export default flatObjectApi(allApis)
