@@ -49,6 +49,42 @@
             <v-col cols="12" md="8" sm="12">
               <v-textarea v-model="projIntro" solo name="input-7-4" label="Project Intro" outlined></v-textarea>
             </v-col>
+            <v-col cols="12" md="8" sm="12">
+              <v-switch v-model="rules.rule" color="primary" label="Verify Twitter Account" value="Twitter"></v-switch>
+              <v-switch v-model="rules.rule" color="primary" label="Verify Discord Account" value="Discord"></v-switch>
+            </v-col>
+            <v-col cols="12" md="8" sm="12"
+              ><v-switch v-model="rules.skill" :label="`Skill Upgrade: ${rules.skill.toString()}`"></v-switch>
+            </v-col>
+
+            <!-- 设置过期时间 -->
+            <v-col cols="12" md="8" sm="12">
+              <v-menu
+                ref="menu1"
+                v-model="menu1"
+                :close-on-content-click="false"
+                transition="scale-transition"
+                offset-y
+                max-width="290px"
+                min-width="auto"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
+                    v-model="dateFormatted"
+                    label="Date"
+                    persistent-hint
+                    prepend-icon="mdi-calendar"
+                    v-bind="attrs"
+                    @blur="date = parseDate(dateFormatted)"
+                    v-on="on"
+                  ></v-text-field>
+                </template>
+                <v-date-picker v-model="expiresDate" no-title @input="menu1 = false"></v-date-picker>
+              </v-menu>
+              <p>
+                Expires Date: <strong>{{ expiresDate }}</strong>
+              </p>
+            </v-col>
 
             <v-divider></v-divider>
             <!-- Swtich NFT Contract -->
@@ -268,6 +304,10 @@ import WhiteListSteper from './WhiteListSteper.vue'
 import { getMetaDropNftBaseUri } from '@lib/env/safe-env.js'
 import { mapState, mapGetters } from 'vuex'
 import { validFormData } from './add-nft'
+import { getWeb3js } from '@lib/web3'
+import { signCreateDrops } from '@lib/web3/sign-util'
+import { METAMASK_DOWNLOAD_URL } from '@lib/metamask/constants'
+
 export default {
   name: 'AddNFTDrop',
   components: { WhiteListSteper },
@@ -293,22 +333,35 @@ export default {
       rules: {
         nameRules: [(v) => !!v || 'Name is required'],
         addrFileRules: [],
+        skill: false,
+        credentials: [],
+        rule: [],
       },
       select: null,
       nftBaseUrl: '',
       traits: [{ trait_type: '', value: 10, display_type: '' }],
       loading: false,
+      expiresDate: new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().substr(0, 10),
+      dateFormatted: this.formatDate(
+        new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().substr(0, 10)
+      ),
+      menu1: false,
     }
   },
   computed: {
-    ...mapState('wal', ['selectedAddress']),
+    ...mapState('wal', ['selectedAddress', 'walletConnected', 'shortAddress', 'hasUserRegist', 'userInfo']),
     ...mapGetters('sol', ['nftBaseUri']),
     ...mapGetters('biz', ['credentialsSelect', 'skillsSelect']),
+    ...mapGetters('web3', ['metamaskInjected', 'envChecking']),
+    ...mapGetters(['getConnectBtn']),
     dyncTraits() {
       return this.traits
     },
     showUseMetaSc() {
       return this.useMetaSc === 1
+    },
+    computedDateFormatted() {
+      return this.formatDate(this.date)
     },
   },
   watch: {
@@ -316,6 +369,9 @@ export default {
       if (n) {
         this.nftBaseUrl = n
       }
+    },
+    expiresDate(val) {
+      this.dateFormatted = this.formatDate(this.expiresDate)
     },
   },
   mounted() {
@@ -348,6 +404,8 @@ export default {
       if (v >= 80) return 'red accent-2'
     },
     setDropFilterTypeHandler(typ) {
+      this.merkleRoot = null
+      this.dropAmount = 0
       this.filterType = typ
     },
     async whiteFileChangeHandler(file) {
@@ -417,20 +475,41 @@ export default {
       this.merkleRoot = merkleRoot
       this.dropAmount = amout
     },
+    //空投项目验签
+    async signOpts(merkleRoot) {
+      if (!merkleRoot) {
+        this.$toast('CreateDrops merkleRoot required', 'warn', 3000)
+        return
+      }
+      try {
+        const opts = {
+          selectedAddress: this.selectedAddress,
+          merkleRoot: merkleRoot,
+        }
+        const web3js = await getWeb3js()
+        return await signCreateDrops(web3js, opts)
+      } catch (ex) {
+        console.log('Regist>>>>>>>>>ex>>>>>>>>', ex)
+        this.$toast(`Signed fail.${ex.message}`, 'fail', 8000)
+      }
+    },
     // Submit
     async submitDropHandler() {
       try {
         this.loading = true
         const submitData = validFormData(this)
-
         const scb = this.gobackHome.bind(this)
-
+        const sign = await this.signOpts(submitData.merkleRoot)
+        submitData.address = this.selectedAddress
+        submitData.signedData = sign
+        console.log('signOpts>>>>>>>>>ex>>>>>>>>', submitData)
         const resp = await this.$api('drop.create_nft', submitData)
         const { code, msg, data } = resp
-        if (code !== 0) {
+        if (code !== 0 || !data || !data.length) {
           throw new Error(msg || 'Create Drop Fial')
         } else {
           this.$toast('Create Drop Success', 'success', 3000, scb)
+          this.gobackHome()
         }
       } catch (ex) {
         this.loading = false
@@ -493,9 +572,42 @@ export default {
       console.log('>>>>>>>>>>>>>>>>', v)
       this.opensea = Boolean(v)
     },
-    addCustomRule(selectObj){
-      console.log("============",selectObj)
-    }
+    async addCustomRule(selectObj) {
+      console.log(selectObj)
+      const vm = this
+      try {
+        if (!selectObj) throw new Error('Please select a credentials.')
+        const formData = new FormData()
+        formData.append('ids', selectObj.value)
+        const resp = await vm.$api('drop.credentialsAddressMerkleTree', { ids: selectObj.value })
+        const { code, msg, data } = resp
+
+        if (code !== 0) {
+          console.log(msg, 'server error')
+          vm.$toast(msg || 'server error', 'fail', 6000)
+          return
+        } else {
+          const { merkleRoot, airdropsAddressCount } = data
+          vm.setUploadResult(merkleRoot, airdropsAddressCount)
+          this.rules.credentials = []
+          this.rules.credentials.push(selectObj.value)
+        }
+      } catch (ex) {
+        this.$toast(ex.message, 'fail', 6000)
+      }
+    },
+    formatDate(date) {
+      if (!date) return null
+
+      const [year, month, day] = date.split('-')
+      return `${month}/${day}/${year}`
+    },
+    parseDate(date) {
+      if (!date) return null
+
+      const [month, day, year] = date.split('/')
+      return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
+    },
   },
 }
 </script>

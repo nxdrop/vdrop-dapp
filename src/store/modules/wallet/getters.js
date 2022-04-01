@@ -10,7 +10,7 @@ export const walletConnected = (state) => {
 }
 
 export const hasUserRegist = (state) => {
-  const { address, email, tiwtter, discord } = state.userInfo
+  const { address, email, twitter, discord } = state.userInfo
 
-  return address && (email || tiwtter || discord)
+  return address && (email || twitter || discord)
 }

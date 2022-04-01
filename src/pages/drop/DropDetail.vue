@@ -16,6 +16,17 @@
           <v-list-item-subtitle>
             {{ d.nftInfo ? d.nftInfo.description : '' }}
           </v-list-item-subtitle>
+          <v-list-item-subtitle v-if="d.expiresDate"> End Date: {{ d.expiresDate }} </v-list-item-subtitle>
+          <v-list-item-subtitle v-if="!userInfo.email">
+            <v-btn color="primary" elevation="2" small>Verify Email Account</v-btn>
+          </v-list-item-subtitle>
+          <v-list-item-subtitle v-if="d.twitterRule && !userInfo.twitter">
+            <v-btn color="primary" elevation="2" small>Verify Twitter Account</v-btn>
+          </v-list-item-subtitle>
+          <v-list-item-subtitle v-if="d.discordRule && !userInfo.discord">
+            <v-btn color="primary" elevation="2" small>Verify Discord Account</v-btn>
+          </v-list-item-subtitle>
+         
         </v-list-item-content>
         <v-list-item-avatar v-if="d.nftInfo && d.nftInfo.image" key="'img_' + id" size="120" tile color="grey">
           <v-img :src="d.nftInfo.image"></v-img>
@@ -27,7 +38,7 @@
         </v-list-item-avatar>
       </v-list-item>
       <v-card-actions>
-        <v-btn rounded outlined small text class="px-6" @click="claimHandler">Claim</v-btn>
+        <v-btn rounded outlined small text class="px-6" :disabled="!canClaim" @click="claimHandler">Claim</v-btn>
       </v-card-actions>
     </v-card>
   </v-container>
@@ -45,7 +56,7 @@ export default {
     claimParam: {},
   }),
   computed: {
-    ...mapState('wal', ['chainId']),
+    ...mapState('wal', ['chainId', 'userInfo']),
     ...mapGetters('biz', ['dropItems']),
     ...mapGetters('wal', ['currentAddress']),
     d() {
@@ -54,7 +65,13 @@ export default {
       return detail || {}
     },
     canClaim() {
-      return this.claimParam && this.claimParam.address
+      const _address = (this.userInfo.address && this.userInfo.address != '')
+      const _twitter = (this.userInfo.twitter && this.userInfo.twitter != '')
+      const _discord = (this.userInfo.discord && this.userInfo.discord != '')
+      const _email = (this.userInfo.email && this.userInfo.email != '')
+      const ret = (_address && _twitter && _discord && _email)
+      console.log(_address,_twitter,_discord,_email,ret)
+      return ret
     },
   },
   mounted() {
@@ -84,6 +101,7 @@ export default {
       try {
         const dropId = this.id
         const { chainId, selectedAddress } = this.$store.state.wal || {}
+        // console.log(chainId,"chainId")
         if (!chainId || !selectedAddress) throw new Error('Please connect wallet')
 
         if (!dropId) throw new Error('Miss dropid or address')

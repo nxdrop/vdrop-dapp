@@ -68,7 +68,7 @@
             </div>
             <div class="muser-regist__form">
               <v-text-field dense label="Email" :value="inputEmail" @change="(v) => (inputEmail = v)"></v-text-field>
-              <v-text-field v-model="inputTiwtter" dense label="Tiwtter"></v-text-field>
+              <v-text-field v-model="inputtwitter" dense label="twitter"></v-text-field>
               <v-text-field v-model="inputDiscord" dense label="Discord"></v-text-field>
             </div>
 
@@ -85,7 +85,7 @@
                 <span class="label">Email :</span><span class="text">{{ userInfo.email || '' }}</span>
               </div>
               <div class="d-inline">
-                <span class="label">Tiwtter :</span><span class="text">{{ userInfo.tiwtter || '' }}</span>
+                <span class="label">twitter :</span><span class="text">{{ userInfo.twitter || '' }}</span>
               </div>
               <div class="d-inline">
                 <span class="label">Discord :</span><span class="text">{{ userInfo.discord || '' }}</span>
@@ -137,7 +137,7 @@ export default {
       opened: false,
       registText: 'If you want to get a higher airdrop weight, please enter your info registration here.',
       inputEmail: '',
-      inputTiwtter: '',
+      inputtwitter: '',
       inputDiscord: '',
     }
   },
@@ -205,7 +205,7 @@ export default {
         const opts = {
           selectedAddress: this.selectedAddress,
           email: this.inputEmail,
-          tiwtter: this.inputTiwtter || '',
+          twitter: this.inputtwitter || '',
           discord: this.inputDiscord || '',
         }
 

@@ -12,7 +12,7 @@ export default {
       address: '',
       email: '',
       discord: '',
-      tiwtter: '',
+      twitter: '',
     },
   },
   mutations,

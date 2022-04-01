@@ -13,6 +13,9 @@ export function validFormData(vm) {
   const description = vm.nftDescription
   const dropTotal = vm.dropAmount
 
+  const rules = vm.rules
+  const expiresDate = vm.expiresDate
+
   if (!selectedAddress) {
     throw new Error('Please connect Metamask')
   }
@@ -45,6 +48,8 @@ export function validFormData(vm) {
       logoUri: projLogo,
       description: projIntro,
       dropTotal,
+      expiresDate,
+      rules: rules
     },
     nftname,
     description,

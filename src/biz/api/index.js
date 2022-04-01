@@ -7,6 +7,7 @@ const getApis = {
   'drop.getClaimParams': true,
   'drop.addressList': true,
   'drop.skillList': true,
+  'drop.credentialsAddressMerkleTree': true,
 }
 
 /**

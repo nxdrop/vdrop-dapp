@@ -15,11 +15,11 @@ export default {
     state = state.chainId = typeof chainId !== 'number' ? parseInt(chainId) : chainId
   },
   [types.UPD_USER_INFO](state, userInfo = {}) {
-    const { address = '', email, discord, tiwtter } = userInfo
+    const { address = '', email, discord, twitter } = userInfo
     console.log('>>>>>>>>>>>>>>>>', userInfo)
     state.userInfo.address = address
     email && (state.userInfo.email = email)
     discord && (state.userInfo.discord = discord)
-    tiwtter && (state.userInfo.tiwtter = tiwtter)
+    twitter && (state.userInfo.twitter = twitter)
   },
 }

@@ -7,13 +7,24 @@ export const loadDropList = async ({ commit }) => {
   if (code === 0 && data && data.length) {
     let drops = data.reduce((prev, curr) => {
       const { nftMetadataStructure = [] } = curr
-      const { name, description, dropTotal, logoUri, officalSite } = curr.info
+      const { name, description, dropTotal, logoUri, officalSite, expiresDate, rules } = curr.info
 
       let nftInfo = {}
       if (nftMetadataStructure && nftMetadataStructure.length && typeof nftMetadataStructure[0].info === 'object') {
         nftInfo = { ...nftMetadataStructure[0].info }
       }
-      let d = { ...d, name, description, dropTotal, logoUri, officalSite, dropid: parseInt(curr.dropid), nftInfo }
+      let twitterRule = false
+      let discordRule = false
+      if (rules && rules.rule) {
+        for (var r of rules.rule) {
+          if (r == 'Twitter') {
+            twitterRule = true
+          } else if (r == 'Discord') {
+            discordRule = true
+          }
+        }
+      }
+      let d = { ...d, name, description, dropTotal, logoUri, officalSite, dropid: parseInt(curr.dropid), nftInfo, expiresDate, twitterRule, discordRule }
       prev = prev.concat([d])
       return prev
     }, [])

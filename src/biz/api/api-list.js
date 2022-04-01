@@ -114,6 +114,12 @@ const drop = {
     url: '/airdrops/skillList',
     method: 'get',
   },
+  credentialsAddressMerkleTree: {
+    url: '/airdrops/credentialsAddressMerkleTree',
+    method: 'get',
+  },
+
+
 }
 
 const storage = {
