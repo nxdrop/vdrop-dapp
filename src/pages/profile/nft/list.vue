@@ -32,21 +32,23 @@
 </template>
 
 <script>
+import { mapGetters, mapState } from 'vuex'
 export default {
   name: 'UserNftList',
   components: {},
   data: () => ({
     cards: [
-      { title: 'HongKondg', src: 'https://s1.ax1x.com/2022/03/22/qKTyB8.png', flex: 4 },
-      {
-        title: 'TEst Deops',
-        src: 'https://gateway.pinata.cloud/ipfs/QmPTq4aSfUpogxfipi1w5s8ekVT6EqwmPL3KpAu5p42g9t/1.png',
-        flex: 4,
-      },
-      { title: 'HongKondgGGG', src: 'https://s1.ax1x.com/2022/03/22/qKTyB8.png', flex: 4 },
-      { title: 'Best airlines', src: 'https://s1.ax1x.com/2022/03/22/qKTRhj.png', flex: 4 },
-      { title: 'MobkeyTest', src: 'https://s4.ax1x.com/2022/02/22/bpVpGQ.png' },
+      // { title: 'HongKondg', src: 'https://s1.ax1x.com/2022/03/22/qKTyB8.png', flex: 4 },
+      // {
+      //   title: 'TEst Deops',
+      //   src: 'https://gateway.pinata.cloud/ipfs/QmPTq4aSfUpogxfipi1w5s8ekVT6EqwmPL3KpAu5p42g9t/1.png',
+      //   flex: 4,
+      // },
+      // { title: 'HongKondgGGG', src: 'https://s1.ax1x.com/2022/03/22/qKTyB8.png', flex: 4 },
+      // { title: 'Best airlines', src: 'https://s1.ax1x.com/2022/03/22/qKTRhj.png', flex: 4 },
+      // { title: 'MobkeyTest', src: 'https://s4.ax1x.com/2022/02/22/bpVpGQ.png' },
     ],
+    nfts: [],
   }),
   computed: {
     cardCols() {
@@ -65,8 +67,22 @@ export default {
           return cols
       }
     },
+    ...mapGetters('wal', ['currentAddress']),
   },
-  methods: {},
+  mounted() {
+    console.log('-----------------------')
+  },
+  methods: {
+    async nftlist() {
+      if (this.currentAddress) {
+        try {
+          await this.$store.dispatch('biz/loadDropList')
+        } catch (ex) {
+          this.$toast(ex.message, 'fail', 6000)
+        }
+      }
+    },
+  },
 }
 </script>
 <style lang="scss" scoped></style>
