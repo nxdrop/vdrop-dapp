@@ -5,17 +5,20 @@ export const loadNFTsList = async ({ commit }, selectedAddress) => {
   if (selectedAddress) {
     const resp = await getNFTs(selectedAddress)
     const { ownedNfts } = resp
+
     if (ownedNfts && ownedNfts.length) {
       let nfts = ownedNfts.reduce((prev, curr) => {
         const tokenId = curr.tokenId ? hex2int(curr.tokenId) : 0
         const tokenUri = curr.tokenUri
         const metadata = curr.metadata
-        const gateway = curr.media && curr.media.length > 0 ? curr.media[0].gateway : ""
-        let d = { ...d, tokenId, tokenUri, metadata, gateway }
+        const src = curr.media && curr.media.length > 0 ? curr.media[0].raw : ""
+        const title= curr.title
+        
+        let d = { ...d, tokenId, tokenUri, metadata, src ,title}
         prev = prev.concat([d])
         return prev
       }, [])
-      console.log(nfts, ownedNfts)
+      console.log(nfts,"====nfts", ownedNfts)
       commit(types.UPD_NFTS_LIST, nfts)
     } else {
       throw new Error('No nfts.')

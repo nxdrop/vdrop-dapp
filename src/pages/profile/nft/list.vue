@@ -6,13 +6,13 @@
     </v-toolbar>
     <v-container fluid>
       <v-row>
-        <v-col v-for="(card, idx) in cards" :key="idx + '_' + card.title" :cols="cardCols">
+        <v-col v-for="(card, idx) in nftsItems" :key="idx + '_' + card.title" :cols="cardCols">
           <v-card>
             <v-img
               :src="card.src"
               class="white--text align-end"
               gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-              height="200px"
+              height="400px"
             >
               <v-card-title v-text="card.title"></v-card-title>
             </v-img>
@@ -68,15 +68,16 @@ export default {
       }
     },
     ...mapGetters('wal', ['currentAddress']),
+    ...mapGetters('nfts', ['nftsItems']),
   },
   mounted() {
-    console.log('-----------------------')
+    this.nftlist()
   },
   methods: {
     async nftlist() {
       if (this.currentAddress) {
         try {
-          await this.$store.dispatch('biz/loadDropList')
+          await this.$store.dispatch('nfts/loadNFTsList',this.currentAddress)
         } catch (ex) {
           this.$toast(ex.message, 'fail', 6000)
         }
