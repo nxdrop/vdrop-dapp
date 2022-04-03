@@ -1,8 +1,8 @@
 import { getNFTs } from '@/libs/nftsapi'
 import * as types from './mutation-types'
 
-export const loadNFTsList = async ({ commit }, selectedAddress) => {
-  if (selectedAddress) {
+export const loadNFTsList = async ({ commit, state }, selectedAddress) => {
+  if (selectedAddress || state.selectedAddress) {
     const resp = await getNFTs(selectedAddress)
     const { ownedNfts } = resp
 
@@ -12,13 +12,13 @@ export const loadNFTsList = async ({ commit }, selectedAddress) => {
         const tokenUri = curr.tokenUri
         const metadata = curr.metadata
         const src = curr.media && curr.media.length > 0 ? curr.media[0].raw : ""
-        const title= curr.title
-        
-        let d = { ...d, tokenId, tokenUri, metadata, src ,title}
+        const title = curr.title
+
+        let d = { ...d, tokenId, tokenUri, metadata, src, title }
         prev = prev.concat([d])
         return prev
       }, [])
-      console.log(nfts,"====nfts", ownedNfts)
+      console.log(nfts, "====nfts", ownedNfts)
       commit(types.UPD_NFTS_LIST, nfts)
     } else {
       throw new Error('No nfts.')

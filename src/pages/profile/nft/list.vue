@@ -75,12 +75,10 @@ export default {
   },
   methods: {
     async nftlist() {
-      if (this.currentAddress) {
-        try {
-          await this.$store.dispatch('nfts/loadNFTsList',this.currentAddress)
-        } catch (ex) {
-          this.$toast(ex.message, 'fail', 6000)
-        }
+      try {
+        await this.$store.dispatch('nfts/loadNFTsList', this.currentAddress)
+      } catch (ex) {
+        this.$toast(ex.message, 'fail', 6000)
       }
     },
   },
