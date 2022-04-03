@@ -35,23 +35,6 @@ module.exports = {
     disableHostCheck: false,
     proxy: {
       ...apiProxy,
-
-      // '/airdrops/getAddress': {
-      //   changeOrigin: true,
-      //   ws: true,
-      //   target: 'http://nftdrop.aibyb.com.cn/airdrops/getAddress?address=',
-      //   pathRewrite: {
-      //     '^/meta/airdrops/getAddress?address=*': '',
-      //   },
-      //   bypass(req, res, proxyOptions) {
-      //     const id = req.query.address ? req.query.address : ''
-      //     console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', id)
-
-      //     const API = Object.assign({}, proxyOptions, { target: proxyOptions.target + id })
-      //     console.log('>>>>>>>>>>target>>>>>>>>>>>>>>>>>>>>>>>>>>>>', API.target)
-      //     return API.target
-      //   },
-      // },
     },
   },
   lintOnSave: true,
