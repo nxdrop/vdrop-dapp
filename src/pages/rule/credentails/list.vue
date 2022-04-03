@@ -57,7 +57,7 @@
 import { mapGetters, mapState } from 'vuex'
 
 export default {
-  name: 'credentialsList',
+  name: 'CredentialsList',
   components: {},
   data: () => ({
     cards: [
@@ -198,7 +198,7 @@ export default {
 .v-card:not(.on-hover) {
   opacity: 0.9;
 }
-.v-card .on-hover .theme--dark{
-  background-color: rgba(#FFF, 0.8)
+.v-card .on-hover .theme--dark {
+  background-color: rgba(#fff, 0.8);
 }
 </style>
