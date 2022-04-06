@@ -68,7 +68,7 @@
                 max-width="290px"
                 min-width="auto"
               >
-                <template v-slot:activator="{ on, attrs }">
+                <template #activator="{ on, attrs }">
                   <v-text-field
                     v-model="dateFormatted"
                     label="Date"
@@ -502,9 +502,10 @@ export default {
         const sign = await this.signOpts(submitData.merkleRoot)
         submitData.address = this.selectedAddress
         submitData.signedData = sign
-        console.log('signOpts>>>>>>>>>ex>>>>>>>>', submitData)
+
         const resp = await this.$api('drop.create_nft', submitData)
         const { code, msg, data } = resp
+        console.log('signOpts>>>>>>>>>ex>>>>>>>>', submitData, code)
         if (code !== 0 || !data || !data.length) {
           throw new Error(msg || 'Create Drop Fial')
         } else {
@@ -565,11 +566,9 @@ export default {
       this.traits.splice(idx, 1, n)
     },
     onUseMetaScHandler(v) {
-      console.log('>>>>>>>>>>>>>>>>', v)
       this.useMetaSc = v
     },
     onOpenseaChangeHandler(v) {
-      console.log('>>>>>>>>>>>>>>>>', v)
       this.opensea = Boolean(v)
     },
     async addCustomRule(selectObj) {

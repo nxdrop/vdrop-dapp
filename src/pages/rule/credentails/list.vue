@@ -54,91 +54,13 @@
 
 <script>
 // import { dropSvg } from '@assets/drop.svg'
-import { mapGetters, mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'CredentialsList',
   components: {},
   data: () => ({
-    cards: [
-      // {
-      //   title: 'Airdrop address library',
-      //   avatarUrl: dropSvg,
-      //   icon: 'mdi-water-outline',
-      //   desc: 'High-value AirDrop registered user address library',
-      //   createdBy: '0x9d6...F36',
-      //   type: 'metadrop',
-      //   chainInfo: 'Ethereum & MATIC & Binance ed.',
-      // },
-      // {
-      //   title: 'Uniswap V2 Liquidity Provider ',
-      //   avatarUrl: 'https://s1.ax1x.com/2022/03/25/qNfJyQ.png',
-      //   desc: 'Any address that provided liquidity to a pool on Uniswap V2 on Ethereum mainnet',
-      //   createdBy: '0xcFc...fC8',
-      //   type: 'subgraph',
-      //   chainInfo: 'Ethereum',
-      //   graphLink: 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2',
-      // },
-      // // {
-      // //   title: 'Uniswap V2 Trader',
-      // //   avatarUrl: 'https://s1.ax1x.com/2022/03/25/qNfJyQ.png',
-      // //   desc: 'Any address that traded on Uniswap V2 on the Ethereum Mainnet',
-      // //   createdBy: '0xc...D655',
-      // //   type: 'subgraph',
-      // //   chainInfo: 'Ethereum',
-      // //   githubLink: 'https://github.com/Uniswap/v2-subgraph',
-      // //   graphLink: 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2',
-      // // },
-      // {
-      //   title: 'OpenSea Legend Buyer',
-      //   avatarUrl: 'https://opensea.io/static/images/logos/opensea.svg',
-      //   desc: 'Addresses successfully bought NFT 10 times on Opensea via Matic Chain are eligible to claim for 3 mystery boxes between 2022/01/05 08:00 - 2022/01/26 08:00 GMT+08:00',
-      //   createdBy: '0xD88F...9bAc',
-      //   type: 'subgraph',
-      //   chainInfo: 'MATIC',
-      //   githubLink: 'https://github.com/Uniswap/v3-subgraph',
-      //   graphLink: 'https://api.thegraph.com/subgraphs/name/nftgalaxy/opensea-polygon-jan',
-      // },
-      // {
-      //   title: 'OpenSea Epic Buyer',
-      //   avatarUrl: 'https://s1.ax1x.com/2022/03/25/qNfJyQ.png',
-      //   desc: 'Addresses successfully boughtt NFT 5 times on Opensea via Matic Chain are eligible to claim for 2 mystery boxes between 2022/01/05 08:00 - 2022/01/26 08:00 GMT+08:00',
-      //   createdBy: '0xD8...9bAc',
-      //   type: 'subgraph',
-      //   chainInfo: 'Ethereum',
-      //   // githubLink: 'https://github.com/Uniswap/v3-subgraph',
-      //   graphLink: 'https://api.thegraph.com/subgraphs/name/nftgalaxy/opensea-polygon-jan',
-      // },
-      // {
-      //   title: 'DyDx Trader',
-      //   avatarUrl: 'https://s1.ax1x.com/2022/03/25/qNIc36.png',
-      //   desc: 'Any address that traded on DyDx on the Binance',
-      //   createdBy: '0xcFc9...a573',
-      //   type: 'subgraph',
-      //   chainInfo: 'Binance',
-      //   githubLink: 'https://github.com/Uniswap/v3-subgraph',
-      //   graphLink: 'https://trade.dydx.exchange/',
-      // },
-      // // {
-      // //   title: 'Opensea Transaction Maker',
-      // //   avatarUrl: 'https://opensea.io/static/images/logos/opensea.svg',
-      // //   desc: 'Users who listed and sucessfuly sold at least one NFT or offered and succesfully bought at least one NFT',
-      // //   createdBy: '0xcFc9...5655',
-      // //   type: 'subgraph',
-      // //   chainInfo: 'MATIC',
-      // //   githubLink: 'https://github.com/itsjerryokolo/OpenSea',
-      // //   graphLink: 'https://api.thegraph.com/subgraphs/name/itsjerryokolo/opensea',
-      // // },
-      // {
-      //   title: 'Learn Web3 skill',
-      //   avatarUrl: 'https://s1.ax1x.com/2022/03/25/qNoyZQ.png',
-      //   desc: 'Users who learn web3 skills or write articles on CSDN community',
-      //   createdBy: '0xcFc9...7355',
-      //   type: 'subgraph',
-      //   chainInfo: 'MATIC',
-      //   githubLink: 'https://gitcode.net/explore',
-      // },
-    ],
+    cards: [],
   }),
   computed: {
     cardCols() {
