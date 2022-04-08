@@ -37,14 +37,11 @@
 <script>
 import { mapGetters, mapState } from 'vuex'
 export default {
-  name: 'credentialsDetail',
+  name: 'CredentialsDetail',
   components: {},
   data: () => ({
     id: '',
   }),
-  mounted() {
-    this.id = this.$route.params.id
-  },
   computed: {
     ...mapGetters('biz', ['credentialsItems']),
     credentials() {
@@ -52,6 +49,9 @@ export default {
       const detail = (this.credentialsItems || []).find((it) => it.id === id || it.id === parseInt(id))
       return detail || {}
     },
+  },
+  mounted() {
+    this.id = this.$route.params.id
   },
   methods: {
     // {

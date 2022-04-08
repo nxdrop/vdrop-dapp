@@ -4,12 +4,12 @@ const isProd = process.env.NODE_ENV === 'production'
 
 // const { R, src } = require('./ci/paths')
 
-const apiProxy = isProd
+const apiProxy = !isProd
   ? {
       '/meta': {
         changeOrigin: true,
         ws: true,
-        target: 'http://nftdrop.aibyb.com.cn/',
+        target: 'http://testdrop.ayibyb.com.cn/',
         pathRewrite: {
           '^/meta': '',
         },
