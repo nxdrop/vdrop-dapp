@@ -63,7 +63,8 @@ export const getNFTs = async (ownerAddr) => {
     ownerAddr = ''
   }
   // const ownerAddr = "0x671de58Bd1EDE160c5D46Ba853A5fB157541E4eB";
-  let url = `${baseURL}/getNFTs/?owner=${ownerAddr}&contractAddresses[]=${contractAddr}`
+  // let url = `${baseURL}/getNFTs/?owner=${ownerAddr}&contractAddresses[]=${contractAddr}`
+  let url = `${baseURL}/getNFTs/?owner=${ownerAddr}`
   let req = {
     url: url,
   }
