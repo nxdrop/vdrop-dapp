@@ -51,7 +51,7 @@
 
 <script>
 import { getAllowWeb3js } from '@lib/web3'
-import { claimNFT } from '@biz/abi/drop-nft-sdk'
+import { claimNFT, isClainNFT } from '@biz/abi/drop-nft-sdk'
 import { mapGetters, mapState } from 'vuex'
 export default {
   name: 'DropDetail',
@@ -60,6 +60,8 @@ export default {
     disableChipColor: 'grey lighten-1',
     id: '',
     claimParam: {},
+    nftTokenId: null,
+    nftClaimed: false,
   }),
   computed: {
     ...mapState('wal', ['chainId', 'userInfo']),
@@ -71,12 +73,22 @@ export default {
       return detail || {}
     },
     canClaim() {
-      const _address = this.userInfo.address && this.userInfo.address != ''
-      const _twitter = this.userInfo.twitter && this.userInfo.twitter != ''
-      const _discord = this.userInfo.discord && this.userInfo.discord != ''
-      const _email = this.userInfo.email && this.userInfo.email != ''
-      const ret = _address && _twitter && _discord && _email
-      // console.log(_address, _twitter, _discord, _email, ret)
+      const _address = !!this.userInfo.address
+      const _twitter = !!this.userInfo.twitter
+      const _discord = !!this.userInfo.discord
+      const _email = !!this.userInfo.email
+      const ret = _address && _email
+      if (this.d.twitterRule) {
+        ret = _address && _twitter
+      }
+      if (this.d.discordRule) {
+        ret = _address && _discord
+      }
+      console.log('this.nftClaimed', this.nftClaimed, ret)
+      if (this.nftClaimed) {
+        return false
+      }
+      // console.log(_address, _twitter, _discord, _email, ret, this.d)
       return ret
     },
   },
@@ -90,10 +102,14 @@ export default {
       this.$api('drop.getClaimParams', { dropId: dropid, address })
         .then((resp) => {
           const { code, msg, data } = resp
-          if (code === 0 && typeof data === 'object') {
+          if (code === 0 && data && typeof data === 'object') {
             this.claimParam = data
+            this.nftTokenId = data.tokenId
+            console.log(this.nftTokenId, 'this.nftTokenId')
+
+            this.hasClaimNFT()
           } else {
-            throw new Error(msg || 'not get drop token')
+            this.nftClaimed = true
           }
         })
         .catch((ex) => {
@@ -102,6 +118,13 @@ export default {
     }
   },
   methods: {
+    async hasClaimNFT() {
+      const { chainId, selectedAddress } = this.$store.state.wal || {}
+      if (!chainId || !selectedAddress) throw new Error('Please connect wallet')
+      console.log(chainId, selectedAddress, 'chainId')
+      const web3js = getAllowWeb3js()
+      this.nftClaimed = await isClainNFT(web3js, chainId, this.nftTokenId, selectedAddress)
+    },
     async claimHandler() {
       const vm = this
       try {
@@ -121,6 +144,7 @@ export default {
         }
         const web3js = getAllowWeb3js()
 
+        vm.nftTokenId = data.tokenId
         const receipt = await claimNFT(web3js, {
           selectedAddress: selectedAddress,
           dropid: dropId,

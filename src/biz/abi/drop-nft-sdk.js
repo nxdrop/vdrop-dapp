@@ -39,7 +39,30 @@ export const getDropBaseInfo = async (web3js, chainId) => {
   }
 }
 
-export const getNFTBalance = async (web3js, address) => {}
+export const getNFTBalance = async (web3js, address) => { }
+
+/**
+ * 判断有没有领取NFT
+ * @param {*} web3js 
+ * @param {*} chainId 
+ * @param {*} tokenId 
+ * @param {*} selectedAddress 
+ * @returns 
+ */
+export const isClainNFT = async (web3js, chainId, tokenId, selectedAddress) => {
+
+  const inst = await DropNFTInstance(web3js, chainId)
+  console.log(tokenId, "id ownerAddress")
+  try {
+
+    let ownerAddress = await inst.methods.ownerOf(tokenId * 1).call()
+    console.log(tokenId, selectedAddress, ownerAddress, "ownerAddress")
+    return (ownerAddress && ownerAddress.toLowerCase() === selectedAddress.toLowerCase())
+  } catch (error) {
+    return false
+  }
+
+}
 
 /**
  *

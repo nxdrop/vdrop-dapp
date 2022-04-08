@@ -131,7 +131,10 @@
                 outlined
               ></v-select>
               <div class="meta-rule-btn px-2">
-                <v-btn text color="orange" @click="addCustomRule(select)">add custom rule</v-btn>
+                <v-btn v-if="!loadingGetMerkleRoot" text color="orange" @click="addCustomRule(select)"
+                  >add custom rule</v-btn
+                >
+                <v-progress-circular v-if="loadingGetMerkleRoot" indeterminate color="primary"></v-progress-circular>
               </div>
             </v-col>
             <v-col cols="12" md="8" sm="12" class="">
@@ -346,6 +349,8 @@ export default {
         new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().substr(0, 10)
       ),
       menu1: false,
+      merkleTreeKey: null,
+      loadingGetMerkleRoot: false,
     }
   },
   computed: {
@@ -574,24 +579,34 @@ export default {
     async addCustomRule(selectObj) {
       console.log(selectObj)
       const vm = this
+      vm.loadingGetMerkleRoot = true
       try {
         if (!selectObj) throw new Error('Please select a credentials.')
-        const formData = new FormData()
-        formData.append('ids', selectObj.value)
-        const resp = await vm.$api('drop.credentialsAddressMerkleTree', { ids: selectObj.value })
-        const { code, msg, data } = resp
-
-        if (code !== 0) {
-          console.log(msg, 'server error')
-          vm.$toast(msg || 'server error', 'fail', 6000)
-          return
-        } else {
-          const { merkleRoot, airdropsAddressCount } = data
-          vm.setUploadResult(merkleRoot, airdropsAddressCount)
-          this.rules.credentials = []
-          this.rules.credentials.push(selectObj.value)
-        }
+        // 定时查询merkleRoot返回结果
+        this.interval = setInterval(async () => {
+          const resp = await vm.$api('drop.credentialsAddressMerkleTree', {
+            ids: selectObj.value,
+            merkleTreeKey: vm.merkleTreeKey,
+          })
+          const { code, msg, data, merkleTreeKey } = resp
+          vm.merkleTreeKey = merkleTreeKey
+          if (code !== 0) {
+            console.log(msg, 'server error')
+            vm.$toast(msg || 'server error', 'fail', 6000)
+          } else if (merkleTreeKey && !data) {
+            console.log(msg, 'server is running ...')
+            vm.$toast('server is running ...', 'warning', 6000)
+          } else {
+            const { merkleRoot, airdropsAddressCount } = data
+            vm.setUploadResult(merkleRoot, airdropsAddressCount)
+            this.rules.credentials = []
+            this.rules.credentials.push(selectObj.value)
+            vm.loadingGetMerkleRoot = false
+            clearInterval(this.interval)
+          }
+        }, 10000)
       } catch (ex) {
+        vm.loadingGetMerkleRoot = false
         this.$toast(ex.message, 'fail', 6000)
       }
     },

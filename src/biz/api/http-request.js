@@ -4,6 +4,7 @@ import { HEADER_TOKEN_KEY } from '../config'
 
 import { API_BASE_URI } from '../config'
 
+console.log("API_BASE_URI", API_BASE_URI)
 const service = axios.create({
   baseURL: API_BASE_URI,
   timeout: 50000,
