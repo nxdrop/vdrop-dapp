@@ -17,16 +17,6 @@
             {{ d.nftInfo ? d.nftInfo.description : '' }}
           </v-list-item-subtitle>
           <v-list-item-subtitle v-if="d.expiresDate"> End Date: {{ d.expiresDate }} </v-list-item-subtitle>
-          <v-list-item-subtitle v-if="!userInfo.email">
-            <v-btn color="primary" elevation="2" small>Verify Email Account</v-btn>
-          </v-list-item-subtitle>
-          <v-list-item-subtitle v-if="d.twitterRule && !userInfo.twitter">
-            <v-btn color="primary" elevation="2" small>Verify Twitter Account</v-btn>
-          </v-list-item-subtitle>
-          <v-list-item-subtitle v-if="d.discordRule && !userInfo.discord">
-            <v-btn color="primary" elevation="2" small>Verify Discord Account</v-btn>
-          </v-list-item-subtitle>
-         
         </v-list-item-content>
         <v-list-item-avatar v-if="d.nftInfo && d.nftInfo.image" key="'img_' + id" size="120" tile color="grey">
           <v-img :src="d.nftInfo.image"></v-img>
@@ -37,6 +27,21 @@
           }}
         </v-list-item-avatar>
       </v-list-item>
+      <v-list-item key="drop-credentails" class="meta-drop-credentails">
+        <v-chip link outlined pill color="teal"
+          >{{ currentAddress ? userInfo.email || '' : 'Wallet unconnected' }}
+          <v-icon class="ps-2">mdi-email</v-icon>
+        </v-chip>
+        <v-chip link outlined pill :color="d.twitterRule ? 'indigo darken-3' : disableChipColor" class="ms-4"
+          >{{ userInfo.twitter || '' }}
+          <v-icon class="ps-2">mdi-twitter</v-icon>
+        </v-chip>
+        <v-chip link outlined pill :color="d.discordRule ? 'deep-purple accent-4' : disableChipColor" class="ms-4"
+          >{{ userInfo.discord || '' }}
+          <v-icon class="ps-2">mdi-discord</v-icon>
+        </v-chip>
+      </v-list-item>
+
       <v-card-actions>
         <v-btn rounded outlined small text class="px-6" :disabled="!canClaim" @click="claimHandler">Claim</v-btn>
       </v-card-actions>
@@ -52,6 +57,7 @@ export default {
   name: 'DropDetail',
   components: {},
   data: () => ({
+    disableChipColor: 'grey lighten-1',
     id: '',
     claimParam: {},
   }),
@@ -65,12 +71,12 @@ export default {
       return detail || {}
     },
     canClaim() {
-      const _address = (this.userInfo.address && this.userInfo.address != '')
-      const _twitter = (this.userInfo.twitter && this.userInfo.twitter != '')
-      const _discord = (this.userInfo.discord && this.userInfo.discord != '')
-      const _email = (this.userInfo.email && this.userInfo.email != '')
-      const ret = (_address && _twitter && _discord && _email)
-      console.log(_address,_twitter,_discord,_email,ret)
+      const _address = this.userInfo.address && this.userInfo.address != ''
+      const _twitter = this.userInfo.twitter && this.userInfo.twitter != ''
+      const _discord = this.userInfo.discord && this.userInfo.discord != ''
+      const _email = this.userInfo.email && this.userInfo.email != ''
+      const ret = _address && _twitter && _discord && _email
+      // console.log(_address, _twitter, _discord, _email, ret)
       return ret
     },
   },

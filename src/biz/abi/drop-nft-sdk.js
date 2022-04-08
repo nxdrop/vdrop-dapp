@@ -68,7 +68,7 @@ export const claimNFT = async (web3js, params = {}) => {
   //   throw new Error(`NFT Token [${dropid}] has claimed`)
   // }
 
-  console.log("==============",id,tokenId,proof,selectedAddress)
+  console.log('==============', id, tokenId, proof, selectedAddress)
   const receipt = await inst.methods.claim(id, tokenId, proof).send({ from: selectedAddress })
 
   // todo toggler
