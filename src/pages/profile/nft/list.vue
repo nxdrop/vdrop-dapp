@@ -6,7 +6,7 @@
     </v-toolbar>
     <v-container fluid>
       <v-row>
-        <v-col v-for="(card, idx) in nftsItems" :key="idx + '_' + card.title" :cols="cardCols">
+        <v-col v-for="(card, idx) in nfts" :key="idx + '_' + card.title" :cols="cardCols">
           <v-card>
             <v-img
               :src="card.src"
@@ -20,7 +20,7 @@
             <v-card-actions>
               <v-spacer></v-spacer>
 
-              <v-btn icon>
+              <v-btn icon @click="taskUpgrade()">
                 <v-icon>mdi-bookmark</v-icon>
               </v-btn>
             </v-card-actions>
@@ -33,6 +33,9 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex'
+import api from '@/biz/api'
+import { getAllowWeb3js } from '@lib/web3'
+import { claimNFT, isClainNFT } from '@biz/abi/drop-nft-sdk'
 export default {
   name: 'UserNftList',
   components: {},
@@ -67,18 +70,74 @@ export default {
           return cols
       }
     },
-    ...mapGetters('wal', ['currentAddress']),
+    ...mapGetters('wal', ['currentAddress', 'chainId', 'userInfo']),
     ...mapGetters('nfts', ['nftsItems']),
   },
   mounted() {
+    this.nfts = []
     this.nftlist()
   },
   methods: {
     async nftlist() {
       try {
         await this.$store.dispatch('nfts/loadNFTsList', this.currentAddress)
+        for (var item of this.nftsItems) {
+          let data = await api('drop.metadatastructure', { tokenId: item.tokenId })
+          console.log('drop.metadatastructure', data)
+          if (data && data.name) {
+            this.nfts.push({ src: data.image, title: data.name, metadata: data })
+          } else {
+            this.nfts.push(item)
+          }
+        }
       } catch (ex) {
         this.$toast(ex.message, 'fail', 6000)
+      }
+    },
+    async taskUpgrade() {
+       const vm = this
+      try {
+        const dropId = this.id
+        const { chainId, selectedAddress } = this.$store.state.wal || {}
+        // console.log(chainId,"chainId")
+        if (!chainId || !selectedAddress) throw new Error('Please connect wallet')
+
+        if (!dropId) throw new Error('Miss dropid or address')
+
+        const claimResp = await this.$api('drop.getClaimParams', { dropId, address: selectedAddress })
+
+        const { code, msg, data } = claimResp
+
+        if (code !== 0 || typeof data !== 'object' || !data) {
+          throw new Error(msg === 'ok' ? 'Not found your address in this drop' : msg)
+        }
+        const web3js = getAllowWeb3js()
+
+        vm.nftTokenId = data.tokenId
+        const receipt = await claimNFT(web3js, {
+          selectedAddress: selectedAddress,
+          dropid: dropId,
+          tokenId: data.tokenId,
+          proof: data.proof,
+          chainId,
+        })
+        console.log('receipt>>', receipt)
+        vm.$toast(`Claim submit success,please blockchain confirm ${receipt.hash}`, 'success', 4000)
+      } catch (ex) {
+        let msg = ex.message
+        console.log('ex', ex.message)
+
+        try {
+          let _emsg = ex.message
+          let regex = 'Internal JSON-RPC error.'
+          if (_emsg.startsWith(regex)) {
+            let jsonStr = _emsg.slice(regex.length).trim()
+            const errData = JSON.parse(jsonStr)
+            msg = errData.message || ex.message
+          }
+        } catch (_) {}
+
+        vm.$toast(msg, 'fail', 10000)
       }
     },
   },
