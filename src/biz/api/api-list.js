@@ -118,6 +118,11 @@ const drop = {
     url: '/airdrops/credentialsAddressMerkleTree',
     method: 'get',
   },
+  metadatastructure: {
+    url: '/airdrops/metadatastructure',
+    method: 'get',
+  },
+
 
 
 }

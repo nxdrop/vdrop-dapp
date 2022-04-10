@@ -8,13 +8,16 @@ export const loadNFTsList = async ({ commit, state }, selectedAddress) => {
 
     if (ownedNfts && ownedNfts.length) {
       let nfts = ownedNfts.reduce((prev, curr) => {
-        const tokenId = curr.tokenId ? hex2int(curr.tokenId) : 0
-        const tokenUri = curr.tokenUri
-        const metadata = curr.metadata
-        const src = curr.media && curr.media.length > 0 ? curr.media[0].raw : ""
-        const title = curr.title
+        let tokenId = curr.id ? hex2int(curr.id.tokenId) : 0
+        let tokenUri = curr.tokenUri
 
-        let d = { ...d, tokenId, tokenUri, metadata, src, title }
+
+        let metadata = curr.metadata
+        let src = curr.media && curr.media.length > 0 ? curr.media[0].raw : ""
+        let title = curr.title
+
+        let d = { ...d, tokenId, metadata, src, title }
+        console.log(d, "d--------")
         prev = prev.concat([d])
         return prev
       }, [])

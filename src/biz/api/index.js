@@ -8,6 +8,8 @@ const getApis = {
   'drop.addressList': true,
   'drop.skillList': true,
   'drop.credentialsAddressMerkleTree': true,
+  'drop.metadatastructure': true,
+  
 }
 
 /**

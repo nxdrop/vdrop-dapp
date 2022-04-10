@@ -70,3 +70,18 @@ export const getNFTs = async (ownerAddr) => {
   }
   return service(req)
 }
+
+/**
+ *
+ * @returns promise
+ */
+export const getMetadata = async (gateway) => {
+  if (!gateway) {
+    return null
+  }
+  let url = `${gateway}`
+  let req = {
+    url: url,
+  }
+  return service(req)
+}
