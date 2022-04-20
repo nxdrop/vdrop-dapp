@@ -16,14 +16,14 @@
               ></v-select>
             </div>
             <div class="foot-item">
-              <ul class="foot-link">
+              <!-- <ul class="foot-link">
                 <li>
                   <router-link to="/"
                     >Play game <img src="@/assets/images/controler.png" class="controler-icon"
                   /></router-link>
                 </li>
                 <li><router-link to="/">Create & Bounty</router-link></li>
-              </ul>
+              </ul> -->
             </div>
           </div>
           <div class="foot-body flex_bd">
@@ -84,7 +84,7 @@
           </div>
         </div>
         <div class="foot-bar">
-          <div class="foot-bar-item">Copyright @ 2021-2022 Meta Investment & Labs. All rights reserved.</div>
+          <div class="foot-bar-item">Copyright @ 2021-2022 by evolvable NFT Lab. All rights reserved.</div>
           <div class="foot-bar-item">
             We use cookies for better service. <router-link to="" class="text-primary">Accept</router-link>
           </div>

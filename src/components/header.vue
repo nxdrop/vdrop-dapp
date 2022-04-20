@@ -17,7 +17,9 @@
         </v-menu>
       </div>
       <div class="v-navbar flex-center">
-        <div v-for="(item, index) in navs" :key="index" class="v-nav-item">{{ item.navitem }}</div>
+        <div v-for="(item, index) in navs" :key="index" class="v-nav-item" @click="navLinkHandler(item)">
+          {{ item.navitem }}
+        </div>
       </div>
       <div class="v-nav-right flex-center">
         <div class="v-search">
@@ -30,9 +32,9 @@
         </div>
         <div class="v-info"><img src="@/assets/images/bell.svg" /><span class="badge"></span></div>
       </div>
-      <div class="v-btn-menu" @click="drawer = true">
+      <!-- <div class="v-btn-menu" @click="drawer = true">
         <v-icon aria-hidden="false">mdi-menu</v-icon>
-      </div>
+      </div> -->
     </div>
     <!-- 手机弹窗 -->
     <v-navigation-drawer v-model="drawer" fixed left temporary>
@@ -82,16 +84,14 @@ export default {
         {
           navitem: 'Claim',
           path: '/',
-          disabled: true,
         },
         {
           navitem: 'Evolve',
-          path: '/evole',
+          path: '/nfts',
         },
         {
           navitem: 'AriDrop Tool',
-          path: '/crate',
-          disabled: true,
+          path: '/',
         },
       ]
       return [...navlist]
