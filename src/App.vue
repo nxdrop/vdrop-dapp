@@ -1,8 +1,9 @@
 <template>
   <v-app>
-    <v-app-bar class="meta-header" light :dense="ui.dense" fixed app clipped-right elevation="0" absolute>
+    <!-- <v-app-bar class="meta-header" light :dense="ui.dense" fixed app clipped-right elevation="0" absolute>
       <MetaHeader />
-    </v-app-bar>
+    </v-app-bar> -->
+    <Header />
 
     <MetaDrawer />
 
@@ -20,10 +21,11 @@
 <script>
 import MetaDrawer from '@comp/MetaDrawer.vue'
 import MetaHeader from '@ui/head/MetaHead.vue'
+import Header from '@/components/header.vue'
 import { mapState } from 'vuex'
 export default {
   name: 'App',
-  components: { MetaDrawer, MetaHeader },
+  components: { MetaDrawer, Header },
   data: () => ({
     dense: false,
     drawer: false,
