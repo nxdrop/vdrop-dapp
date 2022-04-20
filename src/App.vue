@@ -12,20 +12,22 @@
         <router-view />
       </v-container>
     </v-main>
-    <v-footer>
+    <!-- <v-footer>
       <v-container>MetaDrop Labs</v-container>
-    </v-footer>
+    </v-footer> -->
+    <Footer />
   </v-app>
 </template>
 
 <script>
-import MetaDrawer from '@comp/MetaDrawer.vue'
-import MetaHeader from '@ui/head/MetaHead.vue'
+// import MetaDrawer from '@comp/MetaDrawer.vue'
+// import MetaHeader from '@ui/head/MetaHead.vue'
 import Header from '@/components/header.vue'
+import Footer from '@/components/footer.vue'
 import { mapState } from 'vuex'
 export default {
   name: 'App',
-  components: { MetaDrawer, Header },
+  components: { Header, Footer },
   data: () => ({
     dense: false,
     drawer: false,

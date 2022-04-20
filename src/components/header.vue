@@ -1,7 +1,7 @@
 <template>
   <div class="header meta-head">
     <div class="container flex-center">
-      <div class="logo"><img src="@/assets/logo.png" @click="navLinkHandler('/')" /></div>
+      <div class="logo"><img src="@/assets/logo.png" @click="navHomeHandler" /></div>
       <div class="lang-box">
         <v-menu offset-y>
           <template #activator="{ on, attrs }">
@@ -52,7 +52,7 @@
       <v-list nav dense>
         <v-list-item-group>
           <v-list-item v-for="(item, index) in navs" :key="index">
-            <v-list-item-title>{{ item.navitem }}</v-list-item-title>
+            <v-list-item-title @click="navLinkHandler(item)">{{ item.navitem }}</v-list-item-title>
           </v-list-item>
         </v-list-item-group>
       </v-list>
@@ -81,12 +81,17 @@ export default {
       var navlist = [
         {
           navitem: 'Claim',
+          path: '/',
+          disabled: true,
         },
         {
           navitem: 'Evolve',
+          path: '/evole',
         },
         {
           navitem: 'AriDrop Tool',
+          path: '/crate',
+          disabled: true,
         },
       ]
       return [...navlist]
@@ -101,8 +106,11 @@ export default {
         // this.$i18n.locale = 'cn'
       }
     },
-    navLinkHandler(path) {
-      if (path) {
+    navHomeHandler() {
+      this.$router.replace('/')
+    },
+    navLinkHandler({ path, disabled }) {
+      if (path && !disabled) {
         this.$router.push(path)
       }
     },
