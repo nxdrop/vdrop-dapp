@@ -8,9 +8,9 @@
     <!-- <MetaDrawer /> -->
 
     <v-main>
-      <v-container>
-        <router-view />
-      </v-container>
+      <!-- <v-container> -->
+      <router-view />
+      <!-- </v-container> -->
     </v-main>
     <!-- <v-footer>
       <v-container>MetaDrop Labs</v-container>
