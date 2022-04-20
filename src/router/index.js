@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 // import Home from '@views/Home.vue'
 import HomePage from '@pages/home/index.vue'
+import Airdrops from '@pages/drop/airdrops.vue'
 
 Vue.use(VueRouter)
 
@@ -9,7 +10,8 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: HomePage,
+    // component: HomePage,
+    component: Airdrops,
   },
   {
     path: '/signup',
@@ -36,6 +38,12 @@ const routes = [
         component: () => import(/*webpackChunkName: "player" */ '@pages/drop/AddNFT.vue'),
       },
     ],
+  },
+  {
+    path: '/airdrop',
+    name: 'airdrop',
+    redirect: { path: '/drop/airdrop' },
+    component: () => import(/*webpackChunkName: "signup" */ '@pages/drop/airdrops.vue'),
   },
   {
     path: '/drop_detail/:id',

@@ -11,7 +11,7 @@
         <a href="#" class="nav-link" @click="navLinkHandler('/rule/credentails')"><span>Credentails</span></a>
       </li>
       <li>
-        <a href="#" class="nav-link" @click="navLinkHandler('/u/nft/list')"><span>My NFTs</span></a>
+        <a href="#" class="nav-link" @click="navLinkHandler('/nfts')"><span>My NFTs</span></a>
       </li>
       <!-- <li>
         <a href="#" class="nav-link"><span>NFT</span></a>
