@@ -4,7 +4,7 @@ const isProd = process.env.NODE_ENV === 'production'
 
 // const { R, src } = require('./ci/paths')
 
-const apiProxy = isProd
+const apiProxy = !isProd
   ? {
       '/meta': {
         changeOrigin: true,
@@ -28,7 +28,7 @@ const apiProxy = isProd
 
 console.log(isProd, apiProxy, 'apiProxy')
 module.exports = {
-  publicPath: process.env.PUBLIC_PATH || '',
+  publicPath: process.env.PUBLIC_PATH || '/',
   productionSourceMap: isProd,
   transpileDependencies: ['vuetify'],
   devServer: {

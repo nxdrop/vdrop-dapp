@@ -14,6 +14,11 @@ Vue.use(Toast)
 
 Vue.config.productionTip = false
 Vue.prototype.$api = api
+import AOS from 'aos'
+import 'aos/dist/aos.css'
+import 'wowjs/css/libs/animate.css'
+import './assets/fonts/stylesheet.css'
+import './assets/css/css.css'
 
 initStore(store)
 
