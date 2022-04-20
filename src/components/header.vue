@@ -1,7 +1,7 @@
 <template>
   <div class="header meta-head">
     <div class="container flex-center">
-      <div class="logo"><img src="@/assets/logo.png" /></div>
+      <div class="logo"><img src="@/assets/logo.png" @click="navLinkHandler('/')" /></div>
       <div class="lang-box">
         <v-menu offset-y>
           <template #activator="{ on, attrs }">
@@ -99,6 +99,11 @@ export default {
         // this.$i18n.locale = 'en'
       } else {
         // this.$i18n.locale = 'cn'
+      }
+    },
+    navLinkHandler(path) {
+      if (path) {
+        this.$router.push(path)
       }
     },
   },
