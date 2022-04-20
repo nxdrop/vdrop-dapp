@@ -6,27 +6,27 @@ const isProd = process.env.NODE_ENV === 'production'
 
 const apiProxy = isProd
   ? {
-    '/meta': {
-      changeOrigin: true,
-      ws: true,
-      target: 'http://testdrop.ayibyb.com.cn/',
-      pathRewrite: {
-        '^/meta': '',
+      '/meta': {
+        changeOrigin: true,
+        ws: true,
+        target: 'http://testdrop.ayibyb.com.cn/',
+        pathRewrite: {
+          '^/meta': '',
+        },
       },
-    },
-  }
+    }
   : {
-    '/meta': {
-      changeOrigin: true,
-      ws: true,
-      target: 'http://127.0.0.1:3000/',
-      pathRewrite: {
-        '^/meta': '',
+      '/meta': {
+        changeOrigin: true,
+        ws: true,
+        target: 'http://127.0.0.1:3000/',
+        pathRewrite: {
+          '^/meta': '',
+        },
       },
-    },
-  }
+    }
 
-console.log(isProd, apiProxy, "apiProxy")
+console.log(isProd, apiProxy, 'apiProxy')
 module.exports = {
   publicPath: process.env.PUBLIC_PATH || '',
   productionSourceMap: isProd,
