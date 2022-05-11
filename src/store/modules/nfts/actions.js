@@ -10,13 +10,14 @@ export const loadNFTsList = async ({ commit, state }, selectedAddress) => {
       let nfts = ownedNfts.reduce((prev, curr) => {
         let tokenId = curr.id ? hex2int(curr.id.tokenId) : 0
         let tokenUri = curr.tokenUri
+        let contract = curr.contract.address
 
 
         let metadata = curr.metadata
         let src = curr.media && curr.media.length > 0 ? curr.media[0].raw : ""
         let title = curr.title
 
-        let d = { ...d, tokenId, metadata, src, title }
+        let d = { ...d, tokenId, metadata, src, title, contract }
         console.log(d, "d--------")
         prev = prev.concat([d])
         return prev

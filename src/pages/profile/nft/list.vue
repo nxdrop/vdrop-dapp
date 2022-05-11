@@ -82,8 +82,8 @@ export default {
       try {
         await this.$store.dispatch('nfts/loadNFTsList', this.currentAddress)
         for (var item of this.nftsItems) {
-          let data = await api('drop.metadatastructure', { tokenId: item.tokenId })
-          console.log('drop.metadatastructure', data)
+          let data = await api('drop.metadatastructure', { tokenId: item.tokenId, contract: item.contract })
+          console.log('drop.metadatastructure', item.tokenId, item.contract, data)
           if (data && data.name) {
             this.nfts.push({ src: data.image, title: data.name, metadata: data })
           } else {
@@ -95,7 +95,7 @@ export default {
       }
     },
     async taskUpgrade() {
-       const vm = this
+      const vm = this
       try {
         const dropId = this.id
         const { chainId, selectedAddress } = this.$store.state.wal || {}

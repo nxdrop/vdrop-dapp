@@ -119,7 +119,7 @@ const drop = {
     method: 'get',
   },
   metadatastructure: {
-    url: '/airdrops/metadatastructure',
+    url: '/airdrops/nftmetadata',
     method: 'get',
   },
 
